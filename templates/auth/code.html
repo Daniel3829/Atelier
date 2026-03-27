@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Iniciar Sesión | Academic Atelier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#f7f9fb",
+              "error": "#ba1a1a",
+              "tertiary-container": "#4f2e00",
+              "on-tertiary-fixed": "#2b1700",
+              "surface-bright": "#f7f9fb",
+              "on-primary-fixed-variant": "#2d476f",
+              "primary": "#002045",
+              "surface-container-high": "#e6e8ea",
+              "on-tertiary-fixed-variant": "#633f0f",
+              "on-tertiary": "#ffffff",
+              "inverse-surface": "#2d3133",
+              "secondary-fixed-dim": "#b7c8e1",
+              "tertiary": "#321b00",
+              "on-primary-container": "#86a0cd",
+              "outline-variant": "#c4c6cf",
+              "background": "#f7f9fb",
+              "primary-fixed-dim": "#adc7f7",
+              "surface-container": "#eceef0",
+              "secondary-container": "#d0e1fb",
+              "on-primary-fixed": "#001b3c",
+              "on-surface-variant": "#43474e",
+              "inverse-primary": "#adc7f7",
+              "on-tertiary-container": "#c6955e",
+              "inverse-on-surface": "#eff1f3",
+              "surface-container-highest": "#e0e3e5",
+              "secondary": "#505f76",
+              "surface-dim": "#d8dadc",
+              "on-surface": "#191c1e",
+              "tertiary-fixed": "#ffddba",
+              "tertiary-fixed-dim": "#f2bc82",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-container": "#54647a",
+              "on-secondary-fixed-variant": "#38485d",
+              "surface-tint": "#455f88",
+              "error-container": "#ffdad6",
+              "surface-variant": "#e0e3e5",
+              "surface-container-low": "#f2f4f6",
+              "on-primary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "primary-container": "#1a365d",
+              "outline": "#74777f",
+              "secondary-fixed": "#d3e4fe",
+              "on-error": "#ffffff",
+              "on-secondary-fixed": "#0b1c30",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#d6e3ff",
+              "on-background": "#191c1e"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .academic-pattern {
+            background-color: #f7f9fb;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23002045' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2v-4h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2v-4h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Auth Shell Suppression: Navigation excluded for focused transactional screen -->
+<main class="min-h-screen flex flex-col items-center justify-center relative px-6 academic-pattern">
+<!-- Background Illustration / Decorative Elements -->
+<div class="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-primary-fixed-dim/20 blur-[100px] rounded-full"></div>
+<div class="absolute bottom-10 right-10 w-64 h-64 bg-secondary-fixed/30 blur-[80px] rounded-full"></div>
+</div>
+<!-- Login Card Container -->
+<div class="w-full max-w-[440px] z-10">
+<!-- Header Section with Brand -->
+<div class="text-center mb-10">
+<div class="inline-flex items-center justify-center w-16 h-16 bg-primary-container rounded-xl mb-6 shadow-[0px_12px_32px_rgba(0,32,69,0.06)]">
+<span class="material-symbols-outlined text-on-primary text-3xl" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<h1 class="font-headline text-3xl font-extrabold text-primary tracking-tight mb-2">Academic Atelier</h1>
+<p class="text-secondary font-medium body-md">Acceso al Módulo de Gestión</p>
+</div>
+<!-- Login Form Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_12px_32px_rgba(0,32,69,0.06)] p-10 border border-outline-variant/15">
+<form action="#" class="space-y-6" id="loginForm" method="POST">
+<!-- Username Field -->
+<div class="space-y-2">
+<label class="block font-label text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="username">Correo Institucional</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline text-xl">alternate_email</span>
+</div>
+<input class="w-full pl-11 pr-4 py-3.5 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-surface-tint/20 focus:bg-surface-container-lowest transition-all placeholder:text-outline/60 text-on-surface" id="username" name="username" placeholder="nombre@atelier.edu" type="email" required/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="block font-label text-xs font-bold uppercase tracking-wider text-on-surface-variant" for="password">Contraseña Segura</label>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline text-xl">lock</span>
+</div>
+<input class="w-full pl-11 pr-12 py-3.5 bg-surface-container-low border-none rounded-lg focus:ring-2 focus:ring-surface-tint/20 focus:bg-surface-container-lowest transition-all placeholder:text-outline/60 text-on-surface" id="password" name="password" placeholder="••••••••" type="password" required/>
+<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-outline hover:text-primary transition-colors" type="button" onclick="togglePassword()">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+</div>
+</div>
+<!-- Options -->
+<div class="flex items-center">
+<input class="h-4 w-4 text-primary focus:ring-surface-tint border-outline-variant rounded" id="remember-me" name="remember-me" type="checkbox"/>
+<label class="ml-2 block text-sm text-secondary font-medium" for="remember-me">Recordarme en este dispositivo por 30 días</label>
+</div>
+<!-- Action Button -->
+<button class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold rounded-lg shadow-lg hover:shadow-xl hover:translate-y-[-1px] active:scale-[0.98] transition-all duration-200" type="submit">
+                        Ingresar al Panel
+                    </button>
+</form>
+<!-- Footer Links inside Card -->
+<div class="mt-10 pt-8 border-t border-surface-container-high text-center">
+<p class="text-sm text-secondary">
+                        ¿Aún no tienes acceso? 
+                        <button onclick="document.getElementById('enrollmentModal').classList.remove('hidden')" class="text-primary font-bold hover:text-surface-tint transition-colors ml-1">Solicita tu matrícula</button>
+</p>
+</div>
+</div>
+<!-- Global Footer Info -->
+<div class="mt-8 flex justify-center gap-6">
+<span class="w-1 h-1 bg-outline-variant rounded-full self-center"></span>
+</div>
+</div>
+<!-- Asymmetric Decorative Element (Editorial Aesthetic) -->
+<div class="hidden lg:block absolute left-24 bottom-24 max-w-xs z-0">
+<div class="h-1 w-12 bg-primary mb-6"></div>
+<p class="font-headline text-lg font-bold text-primary leading-tight">
+                "La educación es el arma más poderosa que puedes usar para cambiar el mundo."
+            </p>
+<p class="mt-4 font-label text-xs uppercase tracking-widest text-secondary">— Credo Institucional</p>
+</div>
+</main>
+
+<!-- Request Enrollment Modal -->
+<div id="enrollmentModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-surface rounded-2xl w-full max-w-lg p-8 shadow-2xl relative">
+        <button onclick="document.getElementById('enrollmentModal').classList.add('hidden')" class="absolute top-4 right-4 text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors focus:outline-none">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <h2 class="text-2xl font-bold font-headline mb-2 text-on-surface">Solicitar Matrícula</h2>
+        <p class="text-sm text-on-surface-variant mb-6">Ingresa tus datos personales. El área administrativa revisará y aprobará tu solicitud.</p>
+        <form id="enrollmentForm" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Nombre</label>
+                    <input type="text" id="reqFirstName" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Apellido</label>
+                    <input type="text" id="reqLastName" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Correo Electrónico (Será tu usuario)</label>
+                <input type="email" id="reqEmail" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Crea una Contraseña</label>
+                <input type="password" id="reqPassword" required minlength="6" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Identificación (Cédula/ID)</label>
+                    <input type="text" id="reqId" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Rol Solicitado</label>
+                    <select id="reqRol" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                        <option value="ESTUDIANTE">Estudiante</option>
+                        <option value="PROFESOR">Profesor</option>
+                    </select>
+                </div>
+            </div>
+            <div id="enrollmentStatus" class="hidden text-sm font-bold text-primary bg-primary-container/20 p-3 rounded-lg text-center"></div>
+            <button type="submit" class="w-full bg-primary text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 mt-8 hover:bg-primary/90 transition-colors">
+                <span class="material-symbols-outlined shrink-0" data-icon="send">send</span>
+                Enviar Solicitud
+            </button>
+        </form>
+    </div>
+</div>
+<!-- Visual Support Image (Hidden but metadata included for context) -->
+<div class="hidden">
+<img alt="Contextual Brand Visual" data-alt="minimalist architectural photo of a modern university library with clean lines soft shadows and intellectual atmosphere blue tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGX-BTjAasnBfadfG7l_MxUuf4Pt-iJhnCXssuGAMVv2RKMWrNTHp06i8T6U-9lWjczn9VhY5gS6atV9C2iT2VOe_gYNONQP0yYMu0OJNlKAErFhnUNhFRnwGHcIJwSByngJre3JQ0R_n-BURtJYNNf8ZQUPO1xYtI39IOT6XkTZuEpLyRT3tfl27lziUMZaX_tMOfuk7wk0BmUXvcXhZ7l_EZYJqZuH12pcw2EW9b1voz2qAHCUnKyGn7bhqSkLuE2lTS1dMX9kyC"/>
+</div>
+<script>
+const API_BASE = window.location.origin + '/api';
+
+// ===== Utilidades de autenticación =====
+const Auth = {
+    setTokens(tokens) {
+        localStorage.setItem('access_token', tokens.access);
+        localStorage.setItem('refresh_token', tokens.refresh);
+    },
+    setUser(user) {
+        localStorage.setItem('user', JSON.stringify(user));
+    },
+    getAccessToken() {
+        return localStorage.getItem('access_token');
+    },
+    getUser() {
+        const u = localStorage.getItem('user');
+        return u ? JSON.parse(u) : null;
+    },
+    clear() {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('user');
+    },
+    redirectByRole(rol) {
+        const routes = {
+            'ADMIN': '/dashboard/admin/',
+            'PROFESOR': '/dashboard/profesor/cursos/',
+            'ESTUDIANTE': '/dashboard/estudiante/cursos/'
+        };
+        window.location.href = routes[rol] || '/';
+    }
+};
+
+// Si ya hay sesión activa, redirigir
+if (Auth.getAccessToken() && Auth.getUser()) {
+    Auth.redirectByRole(Auth.getUser().rol);
+}
+
+// ===== Login Form =====
+const loginForm = document.getElementById('loginForm');
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const submitBtn = loginForm.querySelector('button[type="submit"]');
+
+    // Remove previous error
+    const prevError = document.getElementById('login-error');
+    if (prevError) prevError.remove();
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Iniciando sesión...';
+
+    try {
+        const res = await fetch(`${API_BASE}/auth/login/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.non_field_errors?.[0] || data.email?.[0] || data.detail || 'Credenciales inválidas o cuenta desactivada.');
+        }
+
+        Auth.setTokens(data.tokens);
+        Auth.setUser(data.user);
+        Auth.redirectByRole(data.user.rol);
+    } catch (err) {
+        const errorDiv = document.createElement('div');
+        errorDiv.id = 'login-error';
+        errorDiv.className = 'bg-error-container text-on-error-container px-4 py-3 rounded-lg text-sm font-medium flex items-center gap-2';
+        errorDiv.innerHTML = `<span class="material-symbols-outlined text-sm">error</span>${err.message}`;
+        loginForm.insertBefore(errorDiv, loginForm.firstChild);
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Ingresar al Panel';
+    }
+});
+
+// ===== Signup / Request Enrollment Form =====
+const enrollmentForm = document.getElementById('enrollmentForm');
+enrollmentForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('reqEmail').value;
+    const submitBtn = enrollmentForm.querySelector('button[type="submit"]');
+    const statusBox = document.getElementById('enrollmentStatus');
+
+    statusBox.classList.add('hidden');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+
+    const payload = {
+        first_name: document.getElementById('reqFirstName').value,
+        last_name: document.getElementById('reqLastName').value,
+        email: email,
+        password: document.getElementById('reqPassword').value,
+        identificacion: document.getElementById('reqId').value,
+        rol: document.getElementById('reqRol').value,
+        telefono: "0000000",
+        username: email.split('@')[0] + Math.floor(Math.random()*1000)
+    };
+
+    try {
+        const res = await fetch(`${API_BASE}/auth/register/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.identificacion?.[0] || data.email?.[0] || 'La identificación o el correo ya están en uso.');
+        }
+
+        enrollmentForm.reset();
+        statusBox.textContent = data.mensaje || 'Solicitud enviada. Entrará en revisión administrativa.';
+        statusBox.classList.remove('hidden');
+        statusBox.className = 'text-sm font-bold text-green-700 bg-green-100 p-3 rounded-lg text-center mt-4';
+    } catch (err) {
+        statusBox.textContent = err.message;
+        statusBox.classList.remove('hidden');
+        statusBox.className = 'text-sm font-bold text-error bg-error-container p-3 rounded-lg text-center mt-4';
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span class="material-symbols-outlined shrink-0" data-icon="send">send</span> Enviar Solicitud';
+    }
+});
+
+// ===== Password Visibility Toggle =====
+window.togglePassword = function() {
+    const pwdInput = document.getElementById('password');
+    const icon = document.querySelector('button[onclick="togglePassword()"] .material-symbols-outlined');
+    if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        icon.textContent = 'visibility_off';
+    } else {
+        pwdInput.type = 'password';
+        icon.textContent = 'visibility';
+    }
+};
+</script>
+</body></html>

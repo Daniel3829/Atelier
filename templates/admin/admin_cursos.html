@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestión de Cursos | Academic Atelier</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#f7f9fb",
+              "error": "#ba1a1a",
+              "tertiary-container": "#4f2e00",
+              "on-tertiary-fixed": "#2b1700",
+              "surface-bright": "#f7f9fb",
+              "on-primary-fixed-variant": "#2d476f",
+              "primary": "#002045",
+              "surface-container-high": "#e6e8ea",
+              "on-tertiary-fixed-variant": "#633f0f",
+              "on-tertiary": "#ffffff",
+              "inverse-surface": "#2d3133",
+              "secondary-fixed-dim": "#b7c8e1",
+              "tertiary": "#321b00",
+              "on-primary-container": "#86a0cd",
+              "outline-variant": "#c4c6cf",
+              "background": "#f7f9fb",
+              "primary-fixed-dim": "#adc7f7",
+              "surface-container": "#eceef0",
+              "secondary-container": "#d0e1fb",
+              "on-primary-fixed": "#001b3c",
+              "on-surface-variant": "#43474e",
+              "inverse-primary": "#adc7f7",
+              "on-tertiary-container": "#c6955e",
+              "inverse-on-surface": "#eff1f3",
+              "surface-container-highest": "#e0e3e5",
+              "secondary": "#505f76",
+              "surface-dim": "#d8dadc",
+              "on-surface": "#191c1e",
+              "tertiary-fixed": "#ffddba",
+              "tertiary-fixed-dim": "#f2bc82",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-container": "#54647a",
+              "on-secondary-fixed-variant": "#38485d",
+              "surface-tint": "#455f88",
+              "error-container": "#ffdad6",
+              "surface-variant": "#e0e3e5",
+              "surface-container-low": "#f2f4f6",
+              "on-primary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "primary-container": "#1a365d",
+              "outline": "#74777f",
+              "secondary-fixed": "#d3e4fe",
+              "on-error": "#ffffff",
+              "on-secondary-fixed": "#0b1c30",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#d6e3ff",
+              "on-background": "#191c1e"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-[#eceef0] p-6 space-y-4 z-50">
+    <div class="mb-8 px-2">
+        <h1 class="text-lg font-extrabold text-[#1A365D] font-headline tracking-tight">Academic Atelier</h1>
+        <p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold opacity-60">Módulo de Gestión</p>
+    </div>
+    <nav class="flex-1 space-y-2">
+        <a class="flex items-center gap-3 px-4 py-3 text-[#191c1e] opacity-80 hover:opacity-100 hover:bg-[#e6e8ea] rounded-lg transition-all duration-200 group" href="/dashboard/admin/">
+            <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+            <span class="font-medium text-sm group-hover:translate-x-1 transition-transform">Panel</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 bg-white text-[#1A365D] shadow-sm font-semibold rounded-lg transition-all duration-200 group" href="/dashboard/admin/cursos/">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;" data-icon="menu_book">menu_book</span>
+            <span class="font-medium text-sm">Cursos</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-[#191c1e] opacity-80 hover:opacity-100 hover:bg-[#e6e8ea] rounded-lg transition-all duration-200 group" href="/dashboard/admin/usuarios/">
+            <span class="material-symbols-outlined" data-icon="group">group</span>
+            <span class="font-medium text-sm group-hover:translate-x-1 transition-transform">Usuarios</span>
+        </a>
+    </nav>
+    <div class="mt-auto">
+        <button onclick="Auth.logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-error/10 hover:bg-error text-error hover:text-white rounded-lg transition-all font-semibold font-['Inter'] text-sm shadow-sm md:justify-start">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">logout</span>
+            <span>Cerrar Sesión</span>
+        </button>
+    </div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center px-8 py-4 bg-white/80 dark:bg-[#191c1e]/80 backdrop-blur-md z-40 shadow-[0px_12px_32px_rgba(0,32,69,0.06)]">
+    <div class="flex items-center gap-6">
+        <span class="text-xl font-bold text-[#191c1e] dark:text-[#f7f9fb] font-['Manrope'] tracking-tight">Plataforma Académica</span>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 group cursor-pointer">
+            <div class="text-right">
+                <p id="nav-user-name" class="text-sm font-bold text-on-surface">Cargando...</p>
+                <p id="nav-user-role" class="text-[10px] text-on-surface-variant font-medium uppercase tracking-wider">Cargando...</p>
+            </div>
+            <div id="nav-user-initial" class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold">U</div>
+        </div>
+    </div>
+</header>
+<!-- Page Hero Section -->
+<div class="max-w-7xl mx-auto px-8 pt-12 pb-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-2">
+<h1 class="text-4xl md:text-5xl font-extrabold text-primary font-headline tracking-tighter">Gestión de Cursos</h1>
+<p class="text-on-surface-variant text-sm max-w-lg leading-relaxed">Gestiona y organiza la oferta académica de la institución con precisión.</p>
+</div>
+</div>
+<!-- Stats Bar -->
+<div class="mt-12 flex flex-wrap gap-8 items-center border-b border-outline-variant/10 pb-8">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-[0.15em] font-bold text-on-surface-variant opacity-60">Total Cursos</span>
+<span id="stat-courses" class="text-3xl font-headline font-bold text-primary">-</span>
+</div>
+<div class="w-px h-8 bg-outline-variant/20 hidden md:block"></div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-[0.15em] font-bold text-on-surface-variant opacity-60">Profesores Activos</span>
+<span id="stat-teachers" class="text-3xl font-headline font-bold text-primary">-</span>
+</div>
+<div class="w-px h-8 bg-outline-variant/20 hidden md:block"></div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-[0.15em] font-bold text-on-surface-variant opacity-60">Estudiantes Matriculados</span>
+<span id="stat-students" class="text-3xl font-headline font-bold text-primary">-</span>
+</div>
+</div>
+</div>
+<!-- Course Grid -->
+<div class="max-w-7xl mx-auto px-8 pb-20">
+<div id="courses-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="p-8 text-center text-on-surface-variant col-span-full">Cargando cursos...</div>
+</div>
+</div>
+</main>
+
+<!-- Create Course Modal -->
+<div id="createCourseModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+    <div class="bg-surface rounded-2xl w-full max-w-lg p-8 shadow-2xl relative">
+        <button onclick="document.getElementById('createCourseModal').classList.add('hidden')" class="absolute top-4 right-4 text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <h2 class="text-2xl font-bold font-headline mb-6 text-on-surface">Agregar Nuevo Curso</h2>
+        <form id="createCourseForm" class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Nombre del Curso</label>
+                <input type="text" id="addCourseNombre" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Código</label>
+                <input type="text" id="addCourseCodigo" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Descripción</label>
+                <textarea id="addCourseDescripcion" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" rows="2"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Imagen del curso (Opcional)</label>
+                <input type="file" id="addCourseImagen" accept="image/*" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Duración del curso (meses)</label>
+                    <select id="addCourseDuracion" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                        <option value="">Seleccione Duración</option>
+                        <option value="1">1 Mes</option>
+                        <option value="2">2 Meses</option>
+                        <option value="3">3 Meses</option>
+                        <option value="4">4 Meses</option>
+                        <option value="5">5 Meses</option>
+                        <option value="6">6 Meses</option>
+                        <option value="7">7 Meses</option>
+                        <option value="8">8 Meses</option>
+                        <option value="9">9 Meses</option>
+                        <option value="10">10 Meses</option>
+                        <option value="11">11 Meses</option>
+                        <option value="12">12 Meses</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Profesor Asignado</label>
+                    <select id="addCourseProfesor" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                        <option value="">(Sin asignar)</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-primary text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 mt-8 hover:bg-primary/90 transition-colors">
+                <span class="material-symbols-outlined shrink-0">save</span>
+                Guardar Curso
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Course Modal -->
+<div id="editCourseModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+    <div class="bg-surface rounded-2xl w-full max-w-lg p-8 shadow-2xl relative">
+        <button onclick="document.getElementById('editCourseModal').classList.add('hidden')" class="absolute top-4 right-4 text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <h2 class="text-2xl font-bold font-headline mb-6 text-on-surface">Editar Curso</h2>
+        <form id="editCourseForm" class="space-y-4">
+            <input type="hidden" id="editCourseId">
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Nombre del Curso</label>
+                <input type="text" id="editCourseNombre" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Código</label>
+                <input type="text" id="editCourseCodigo" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Descripción</label>
+                <textarea id="editCourseDescripcion" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" rows="2"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Cambiar Imagen (Opcional)</label>
+                <input type="file" id="editCourseImagen" accept="image/*" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-2 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Duración del curso (meses)</label>
+                    <select id="editCourseDuracion" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                        <option value="">Seleccione Duración</option>
+                        <option value="1">1 Mes</option>
+                        <option value="2">2 Meses</option>
+                        <option value="3">3 Meses</option>
+                        <option value="4">4 Meses</option>
+                        <option value="5">5 Meses</option>
+                        <option value="6">6 Meses</option>
+                        <option value="7">7 Meses</option>
+                        <option value="8">8 Meses</option>
+                        <option value="9">9 Meses</option>
+                        <option value="10">10 Meses</option>
+                        <option value="11">11 Meses</option>
+                        <option value="12">12 Meses</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Profesor Asignado</label>
+                    <select id="editCourseProfesor" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                        <option value="">(Sin asignar)</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-primary text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 mt-8 hover:bg-primary/90 transition-colors">
+                <span class="material-symbols-outlined shrink-0">save</span>
+                Guardar Cambios
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Manage Enrollment Modal -->
+<div id="enrollmentModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+    <div class="bg-surface rounded-2xl w-full max-w-2xl p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <button onclick="document.getElementById('enrollmentModal').classList.add('hidden')" class="absolute top-4 right-4 text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <h2 class="text-2xl font-bold font-headline mb-2 text-on-surface">Gestionar Estudiantes</h2>
+        <p id="enrollmentCourseName" class="text-sm text-on-surface-variant mb-6"></p>
+
+        <!-- Add student form -->
+        <div class="flex gap-3 mb-6">
+            <select id="enrollStudentSelect" class="flex-1 bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                <option value="">Seleccionar estudiante para matricular...</option>
+            </select>
+            <button onclick="enrollStudent()" class="bg-primary text-on-primary px-5 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-primary/90 transition-colors shrink-0">
+                <span class="material-symbols-outlined text-lg">person_add</span>
+                Matricular
+            </button>
+        </div>
+
+        <!-- Enrolled students list -->
+        <div class="bg-surface-container-low rounded-xl overflow-hidden">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-surface-container-high/50">
+                        <th class="px-6 py-4 text-left text-xs font-bold text-on-surface-variant uppercase tracking-widest">Estudiante</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-on-surface-variant uppercase tracking-widest">ID</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-on-surface-variant uppercase tracking-widest">Fecha</th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-on-surface-variant uppercase tracking-widest">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="enrolled-students-body" class="divide-y divide-surface-container">
+                    <tr><td colspan="4" class="p-6 text-center text-on-surface-variant text-sm">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/api.js?v=2"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!Auth.requireAuth()) return;
+    wireLogout();
+
+    const currentUser = Auth.getUser();
+    if (currentUser.rol !== 'ADMIN') {
+        Auth.redirectByRole(currentUser.rol);
+        return;
+    }
+    document.getElementById('nav-user-name').textContent = `${currentUser.first_name} ${currentUser.last_name || ''}`;
+    document.getElementById('nav-user-role').textContent = currentUser.rol;
+    document.getElementById('nav-user-initial').textContent = currentUser.first_name ? currentUser.first_name[0].toUpperCase() : 'U';
+
+    const grid = document.getElementById('courses-grid');
+    const defaultImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuBiUKwJNdLGF-e3HoyVMzKZ4IInjoNog2i77guD1ox9k0RUzmOwe6HShwP64YvAMLYtOuOEbAGv7Ba2ko0VTrPsgQ2qoOKTadE00W9cmUjUTSdMuwCggqiQ9BLbSLQpnjkpPfDSDL5eVCP4wSwhwkWSDwui1m6Llfox3Di5yvxywmsU4-3-ivISKX9dA18nELWM0t8nNYBtLxz4jygkIRlqfv31o7StkXcjuJWsrqVCDHhLmfcK0_yY92bNYZFz-dXbJbACGdw6bKLn";
+
+    let allCourses = [];
+    let allUsers = [];
+    let allMatriculas = [];
+
+    // ============ ADD CARD HTML ============
+    const addCardHTML = `
+        <div onclick="window.openCreateCourseModal()" class="border-2 border-dashed border-outline-variant/30 rounded-xl flex flex-col items-center justify-center p-8 text-center group cursor-pointer hover:border-primary/50 transition-all hover:bg-surface-container-low min-h-[320px]">
+            <div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
+                <span class="material-symbols-outlined text-primary">add_circle</span>
+            </div>
+            <h3 class="text-lg font-bold text-on-surface mb-1">Agregar Nuevo Curso</h3>
+            <p class="text-xs text-on-surface-variant max-w-[180px]">Expandir el catálogo académico.</p>
+        </div>
+    `;
+
+    // ============ OPEN CREATE MODAL ============
+    window.openCreateCourseModal = () => {
+        document.getElementById('createCourseForm').reset();
+        document.getElementById('createCourseModal').classList.remove('hidden');
+    };
+
+    // ============ POPULATE DROPDOWNS ============
+    const populateDropdowns = (profesores, prefix = 'add') => {
+        const profSelect = document.getElementById(`${prefix}CourseProfesor`);
+        profSelect.innerHTML = '<option value="">(Sin asignar)</option>';
+        profesores.forEach(p => {
+            profSelect.innerHTML += `<option value="${p.id}">${p.first_name} ${p.last_name}</option>`;
+        });
+    };
+
+    // ============ LOAD DATA ============
+    const loadData = async () => {
+        try {
+            const [courses, users, matriculas] = await Promise.all([
+                apiGet('/cursos/'),
+                apiGet('/usuarios/'),
+                apiGet('/matriculas/')
+            ]);
+
+            allCourses = courses || [];
+            allUsers = users || [];
+            allMatriculas = matriculas || [];
+
+            const profesores = allUsers.filter(u => u.rol === 'PROFESOR');
+
+            // Stats
+            document.getElementById('stat-courses').textContent = allCourses.length;
+            document.getElementById('stat-teachers').textContent = profesores.length;
+
+            // Count unique enrolled students
+            const uniqueStudents = new Set(allMatriculas.map(m => m.estudiante));
+            document.getElementById('stat-students').textContent = uniqueStudents.size;
+
+            // Populate create modal dropdowns
+            populateDropdowns(profesores, 'add');
+
+            // Render course grid
+            grid.innerHTML = '';
+            allCourses.forEach(c => {
+                const profInitial = c.profesor_nombre ? c.profesor_nombre[0] : '?';
+                const numStudents = allMatriculas.filter(m => m.curso === c.id).length;
+                const duracionStr = `${c.duracion} Mes${c.duracion > 1 ? 'es' : ''}`;
+                const courseImg = c.imagen || defaultImg;
+
+                grid.innerHTML += `
+                <div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(0,32,69,0.04)] hover:shadow-[0px_12px_48px_rgba(0,32,69,0.1)] transition-all duration-300 flex flex-col">
+                    <div class="h-40 relative overflow-hidden">
+                        <img src="${courseImg}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div class="absolute top-4 left-4">
+                            <span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full backdrop-blur-md">${c.codigo}</span>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-primary-container/80 text-on-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full backdrop-blur-md">${duracionStr}</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-on-surface mb-2 font-headline group-hover:text-primary transition-colors">${c.nombre}</h3>
+                            ${c.descripcion ? `<p class="text-xs text-on-surface-variant mb-3 line-clamp-2">${c.descripcion}</p>` : ''}
+                            <div class="flex items-center gap-2 mb-4">
+                                <div class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">${profInitial}</div>
+                                <span class="text-sm text-on-surface-variant font-medium">${c.profesor_nombre || 'No asignado'}</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between pt-4 border-t border-surface-container">
+                                <div class="flex items-center gap-1.5 text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-lg">group</span>
+                                    <span class="text-sm font-semibold">${numStudents} Estudiantes</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="openEnrollmentModal(${c.id})" class="flex-1 bg-surface-container-low text-on-surface-variant px-3 py-2 rounded-lg text-xs font-bold hover:bg-surface-container-high transition-colors flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">group_add</span>
+                                    Estudiantes
+                                </button>
+                                <button onclick="downloadCourseReport(${c.id})" class="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors" title="Descargar Reporte PDF">
+                                    <span class="material-symbols-outlined text-lg">picture_as_pdf</span>
+                                </button>
+                                <button onclick="editCourse(${c.id})" class="p-2 text-surface-tint hover:bg-surface-container-high rounded-lg transition-colors" title="Editar Curso">
+                                    <span class="material-symbols-outlined text-lg">edit</span>
+                                </button>
+                                <button onclick="deleteCourse(${c.id})" class="p-2 text-error hover:bg-error-container/20 rounded-lg transition-colors" title="Eliminar Curso">
+                                    <span class="material-symbols-outlined text-lg">delete</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            grid.innerHTML += addCardHTML;
+
+        } catch (e) {
+            console.error(e);
+            grid.innerHTML = '<div class="p-8 text-center text-error col-span-full">Error al cargar los cursos.</div>';
+        }
+    };
+
+    // ============ DELETE COURSE ============
+    window.deleteCourse = async (id) => {
+        if (!confirm('¿Estás seguro de que deseas eliminar este curso?')) return;
+        try {
+            const res = await apiDelete(`/cursos/${id}/`);
+            if (res && res.ok) {
+                showToast("Curso eliminado exitosamente.");
+                loadData();
+            } else {
+                showToast("Error eliminando curso.", "error");
+            }
+        } catch(e) {
+            showToast("Error de red.", "error");
+        }
+    };
+
+    // ============ EDIT COURSE ============
+    window.editCourse = (id) => {
+        const course = allCourses.find(c => c.id === id);
+        if (!course) return;
+
+        const profesores = allUsers.filter(u => u.rol === 'PROFESOR');
+        populateDropdowns(profesores, 'edit');
+
+        document.getElementById('editCourseId').value = course.id;
+        document.getElementById('editCourseNombre').value = course.nombre;
+        document.getElementById('editCourseCodigo').value = course.codigo;
+        document.getElementById('editCourseDescripcion').value = course.descripcion || '';
+        document.getElementById('editCourseDuracion').value = course.duracion || '1';
+        document.getElementById('editCourseProfesor').value = course.profesor || '';
+        document.getElementById('editCourseImagen').value = ''; // reset file input
+        document.getElementById('editCourseModal').classList.remove('hidden');
+    };
+
+    document.getElementById('editCourseForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('editCourseId').value;
+        
+        const data = new FormData();
+        data.append('nombre', document.getElementById('editCourseNombre').value);
+        data.append('codigo', document.getElementById('editCourseCodigo').value);
+        data.append('descripcion', document.getElementById('editCourseDescripcion').value);
+        
+        const duracion = document.getElementById('editCourseDuracion').value;
+        if (duracion) data.append('duracion', duracion);
+        
+        const profesor = document.getElementById('editCourseProfesor').value;
+        if (profesor) data.append('profesor', profesor);
+
+        const imgInput = document.getElementById('editCourseImagen');
+        if (imgInput.files.length > 0) {
+            data.append('imagen', imgInput.files[0]);
+        }
+
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = 'Guardando...';
+
+        try {
+            const res = await apiFetch(`/cursos/${id}/`, {
+                method: 'PATCH',
+                body: data
+            });
+            const resData = res ? await res.json() : null;
+            if (res && res.ok) {
+                showToast('Curso actualizado correctamente.');
+                document.getElementById('editCourseModal').classList.add('hidden');
+                loadData();
+            } else {
+                const errorMsg = resData?.codigo?.[0] || resData?.detail || 'Error al actualizar curso.';
+                showToast(errorMsg, 'error');
+            }
+        } catch (err) {
+            showToast('Error de red al actualizar curso.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<span class="material-symbols-outlined">save</span> Guardar Cambios';
+        }
+    });
+
+    // ============ CREATE COURSE ============
+    document.getElementById('createCourseForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const data = new FormData();
+        data.append('nombre', document.getElementById('addCourseNombre').value);
+        data.append('codigo', document.getElementById('addCourseCodigo').value);
+        data.append('descripcion', document.getElementById('addCourseDescripcion').value);
+        
+        const duracion = document.getElementById('addCourseDuracion').value;
+        if (duracion) data.append('duracion', duracion);
+        
+        const profesor = document.getElementById('addCourseProfesor').value;
+        if (profesor) data.append('profesor', profesor);
+
+        const imgInput = document.getElementById('addCourseImagen');
+        if (imgInput.files.length > 0) {
+            data.append('imagen', imgInput.files[0]);
+        }
+
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = 'Guardando...';
+
+        try {
+            const res = await apiFetch('/cursos/', {
+                method: 'POST',
+                body: data
+            });
+            const resData = res ? await res.json() : null;
+
+            if (res && res.ok && resData && resData.id) {
+                showToast('Curso creado correctamente.');
+                document.getElementById('createCourseModal').classList.add('hidden');
+                document.getElementById('createCourseForm').reset();
+                loadData();
+            } else {
+                const errorMsg = resData?.codigo?.[0] || resData?.detail || 'Error al crear curso. Verifica los campos.';
+                showToast(errorMsg, 'error');
+            }
+        } catch (err) {
+            console.error(err);
+            showToast('Error de red al crear curso.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<span class="material-symbols-outlined">save</span> Guardar Curso';
+        }
+    });
+
+    // ============ ENROLLMENT MANAGEMENT ============
+    let currentEnrollmentCourseId = null;
+
+    window.openEnrollmentModal = async (courseId) => {
+        currentEnrollmentCourseId = courseId;
+        const course = allCourses.find(c => c.id === courseId);
+        document.getElementById('enrollmentCourseName').textContent = course ? `Curso: ${course.nombre} (${course.codigo})` : '';
+        document.getElementById('enrollmentModal').classList.remove('hidden');
+        await loadEnrollment(courseId);
+    };
+
+    const loadEnrollment = async (courseId) => {
+        const tbody = document.getElementById('enrolled-students-body');
+        tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-on-surface-variant text-sm">Cargando...</td></tr>';
+
+        try {
+            // Refresh matriculas
+            allMatriculas = await apiGet('/matriculas/') || [];
+            const courseMatriculas = allMatriculas.filter(m => m.curso === courseId);
+
+            // Populate student dropdown (only students not already enrolled)
+            const enrolledStudentIds = courseMatriculas.map(m => m.estudiante);
+            const availableStudents = allUsers.filter(u => u.rol === 'ESTUDIANTE' && u.is_active && !enrolledStudentIds.includes(u.id));
+
+            const select = document.getElementById('enrollStudentSelect');
+            select.innerHTML = '<option value="">Seleccionar estudiante para matricular...</option>';
+            availableStudents.forEach(s => {
+                select.innerHTML += `<option value="${s.id}">${s.first_name} ${s.last_name} (${s.identificacion})</option>`;
+            });
+
+            // Show enrolled students
+            if (courseMatriculas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-on-surface-variant text-sm">No hay estudiantes matriculados en este curso.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = '';
+            courseMatriculas.forEach(m => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-surface-container transition-colors';
+                const fecha = m.fecha_matricula ? new Date(m.fecha_matricula).toLocaleDateString('es-CO') : '-';
+                tr.innerHTML = `
+                    <td class="px-6 py-4 text-sm font-semibold text-on-surface">${m.estudiante_nombre}</td>
+                    <td class="px-6 py-4 text-sm text-on-surface-variant">#${m.estudiante}</td>
+                    <td class="px-6 py-4 text-sm text-on-surface-variant">${fecha}</td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="unenrollStudent(${m.id})" class="p-2 text-error hover:bg-error-container/20 rounded-lg transition-colors" title="Retirar Estudiante">
+                            <span class="material-symbols-outlined text-lg">person_remove</span>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (e) {
+            tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-error text-sm">Error al cargar matrículas.</td></tr>';
+        }
+    };
+
+    window.enrollStudent = async () => {
+        const studentId = document.getElementById('enrollStudentSelect').value;
+        if (!studentId) {
+            showToast('Selecciona un estudiante primero.', 'error');
+            return;
+        }
+        try {
+            const res = await apiFetch('/matriculas/', {
+                method: 'POST',
+                body: JSON.stringify({ estudiante: parseInt(studentId), curso: currentEnrollmentCourseId })
+            });
+            const data = res ? await res.json() : null;
+            if (res && res.ok) {
+                showToast('Estudiante matriculado correctamente.');
+                await loadEnrollment(currentEnrollmentCourseId);
+                loadData(); // refresh course cards with new count
+            } else {
+                const msg = data?.non_field_errors?.[0] || data?.detail || 'Error al matricular estudiante.';
+                showToast(msg, 'error');
+            }
+        } catch (e) {
+            showToast('Error de red.', 'error');
+        }
+    };
+
+    window.unenrollStudent = async (matriculaId) => {
+        if (!confirm('¿Retirar a este estudiante del curso?')) return;
+        try {
+            const res = await apiDelete(`/matriculas/${matriculaId}/`);
+            if (res && res.ok) {
+                showToast('Estudiante retirado del curso.');
+                await loadEnrollment(currentEnrollmentCourseId);
+                loadData(); // refresh course cards with new count
+            } else {
+                showToast('Error al retirar estudiante.', 'error');
+            }
+        } catch (e) {
+            showToast('Error de red.', 'error');
+        }
+    };
+
+    // ============ PDF REPORT GENERATION ============
+    window.downloadCourseReport = async (courseId) => {
+        try {
+            showToast('Generando reporte PDF...', 'info');
+            const data = await apiGet(`/reportes/curso/${courseId}/`);
+            if (!data || !data.curso) {
+                showToast('No se pudo cargar la información del reporte.', 'error');
+                return;
+            }
+
+            // Initialize jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Basic styles & configurations
+            const primaryColor = [0, 32, 69]; // The primary blue #002045
+            let yPos = 20;
+
+            // Report Header
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(22);
+            doc.setTextColor(...primaryColor);
+            doc.text('The Academic Atelier', 105, yPos, { align: 'center' });
+            
+            yPos += 10;
+            doc.setFontSize(16);
+            doc.setTextColor(50, 50, 50);
+            doc.text(`Reporte Oficial de Curso`, 105, yPos, { align: 'center' });
+
+            // Course Info Section
+            yPos += 20;
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+
+            doc.text(`Curso: ${data.curso.nombre}`, 14, yPos);
+            doc.text(`Código: ${data.curso.codigo}`, 140, yPos);
+            yPos += 8;
+            doc.text(`Profesor Asignado: ${data.curso.profesor || 'Sin asignar'}`, 14, yPos);
+            doc.text(`Promedio General: ${data.promedio_curso}`, 140, yPos);
+            yPos += 8;
+            doc.text(`Total Estudiantes: ${data.total_estudiantes}`, 14, yPos);
+
+            yPos += 15;
+            doc.setFont('helvetica', 'bold');
+            doc.text('Listado de Estudiantes y Calificaciones', 14, yPos);
+
+            // Calculate maxNotes
+            let maxNotes = 1;
+            if (data.calificaciones) {
+                data.calificaciones.forEach(c => {
+                    if(c.notas && Array.isArray(c.notas)) {
+                        maxNotes = Math.max(maxNotes, c.notas.length);
+                    }
+                });
+            }
+
+            // Table Setup
+            const tableColumn = ["Identificación", "Estudiante"];
+            for(let i=1; i<=maxNotes; i++) {
+                tableColumn.push(`Nota ${i}`);
+            }
+            tableColumn.push("Nota Final");
+            
+            const tableRows = [];
+
+            // Map each enrolled student, merging with grades if available
+            if (data.estudiantes) {
+                data.estudiantes.forEach(est => {
+                    const calif = data.calificaciones.find(c => c.estudiante === est.id);
+                    const row = [
+                        est.identificacion || '-',
+                        `${est.first_name} ${est.last_name}`.trim() || est.username
+                    ];
+                    
+                    for(let i=0; i<maxNotes; i++) {
+                        if (calif && calif.notas && calif.notas[i] !== undefined) {
+                            row.push(calif.notas[i]);
+                        } else {
+                            row.push('N/A');
+                        }
+                    }
+                    
+                    row.push(calif ? calif.nota_final : 'N/A');
+                    tableRows.push(row);
+                });
+            }
+
+            if (tableRows.length === 0) {
+                tableRows.push([{ content: 'No hay estudiantes matriculados.', colSpan: maxNotes + 3, styles: { halign: 'center' } }]);
+            }
+
+            // Generate Table
+            doc.autoTable({
+                startY: yPos + 5,
+                head: [tableColumn],
+                body: tableRows,
+                theme: 'striped',
+                headStyles: { fillColor: primaryColor, textColor: 255 },
+                styles: { font: 'helvetica', fontSize: 10 },
+                alternateRowStyles: { fillColor: [240, 245, 250] } // Light blue tint
+            });
+
+            // Save PDF
+            const currentY = doc.lastAutoTable.finalY + 20;
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text(`Generado el: ${new Date().toLocaleString('es-CO')}`, 14, currentY);
+            
+            doc.save(`Reporte_${data.curso.codigo}_${new Date().getTime()}.pdf`);
+            showToast('✔ Reporte descargado correctamente.');
+
+        } catch (error) {
+            console.error(error);
+            showToast('Error generando el reporte PDF.', 'error');
+        }
+    };
+
+    // ============ INIT ============
+    loadData();
+});
+</script>
+</body></html>

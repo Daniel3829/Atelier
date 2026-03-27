@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestión de Usuarios | Academic Atelier</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts: Manrope & Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#f7f9fb",
+              "error": "#ba1a1a",
+              "tertiary-container": "#4f2e00",
+              "on-tertiary-fixed": "#2b1700",
+              "surface-bright": "#f7f9fb",
+              "on-primary-fixed-variant": "#2d476f",
+              "primary": "#002045",
+              "surface-container-high": "#e6e8ea",
+              "on-tertiary-fixed-variant": "#633f0f",
+              "on-tertiary": "#ffffff",
+              "inverse-surface": "#2d3133",
+              "secondary-fixed-dim": "#b7c8e1",
+              "tertiary": "#321b00",
+              "on-primary-container": "#86a0cd",
+              "outline-variant": "#c4c6cf",
+              "background": "#f7f9fb",
+              "primary-fixed-dim": "#adc7f7",
+              "surface-container": "#eceef0",
+              "secondary-container": "#d0e1fb",
+              "on-primary-fixed": "#001b3c",
+              "on-surface-variant": "#43474e",
+              "inverse-primary": "#adc7f7",
+              "on-tertiary-container": "#c6955e",
+              "inverse-on-surface": "#eff1f3",
+              "surface-container-highest": "#e0e3e5",
+              "secondary": "#505f76",
+              "surface-dim": "#d8dadc",
+              "on-surface": "#191c1e",
+              "tertiary-fixed": "#ffddba",
+              "tertiary-fixed-dim": "#f2bc82",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-container": "#54647a",
+              "on-secondary-fixed-variant": "#38485d",
+              "surface-tint": "#455f88",
+              "error-container": "#ffdad6",
+              "surface-variant": "#e0e3e5",
+              "surface-container-low": "#f2f4f6",
+              "on-primary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "primary-container": "#1a365d",
+              "outline": "#74777f",
+              "secondary-fixed": "#d3e4fe",
+              "on-error": "#ffffff",
+              "on-secondary-fixed": "#0b1c30",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#d6e3ff",
+              "on-background": "#191c1e"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-[#eceef0] p-6 space-y-4 z-50">
+    <div class="mb-8 px-2">
+        <h1 class="text-lg font-extrabold text-[#1A365D] font-headline tracking-tight">Academic Atelier</h1>
+        <p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold opacity-60">Módulo de Gestión</p>
+    </div>
+    <nav class="flex-1 space-y-2">
+        <a class="flex items-center gap-3 px-4 py-3 text-[#191c1e] opacity-80 hover:opacity-100 hover:bg-[#e6e8ea] rounded-lg transition-all duration-200 group" href="/dashboard/admin/">
+            <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+            <span class="font-medium text-sm group-hover:translate-x-1 transition-transform">Panel</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-[#191c1e] opacity-80 hover:opacity-100 hover:bg-[#e6e8ea] rounded-lg transition-all duration-200 group" href="/dashboard/admin/cursos/">
+            <span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+            <span class="font-medium text-sm group-hover:translate-x-1 transition-transform">Cursos</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 bg-white text-[#1A365D] shadow-sm font-semibold rounded-lg transition-all duration-200 group" href="/dashboard/admin/usuarios/">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;" data-icon="group">group</span>
+            <span class="font-medium text-sm">Usuarios</span>
+        </a>
+    </nav>
+    <div class="mt-auto">
+        <button onclick="Auth.logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-error/10 hover:bg-error text-error hover:text-white rounded-lg transition-all font-semibold font-['Inter'] text-sm shadow-sm md:justify-start">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">logout</span>
+            <span>Cerrar Sesión</span>
+        </button>
+    </div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center px-8 py-4 bg-white/80 dark:bg-[#191c1e]/80 backdrop-blur-md z-40 shadow-[0px_12px_32px_rgba(0,32,69,0.06)]">
+    <div class="flex items-center gap-6">
+        <span class="text-xl font-bold text-[#191c1e] dark:text-[#f7f9fb] font-['Manrope'] tracking-tight">Plataforma Académica</span>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 group cursor-pointer">
+            <div class="text-right">
+                <p id="nav-user-name" class="text-sm font-bold text-on-surface">Cargando...</p>
+                <p id="nav-user-role" class="text-[10px] text-on-surface-variant font-medium uppercase tracking-wider">Cargando...</p>
+            </div>
+            <div id="nav-user-initial" class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold">U</div>
+        </div>
+    </div>
+</header>
+<!-- Content Body -->
+<div class="p-8 lg:p-12 max-w-7xl mx-auto w-full">
+<!-- Table Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div class="max-w-xl">
+<span class="text-primary font-bold tracking-widest text-xs uppercase mb-2 block">Directorio Institucional</span>
+<h2 class="text-4xl font-extrabold text-on-surface tracking-tight mb-4 flex items-center gap-4">
+    Gestiona a los usuarios
+    <span id="pending-badge" class="hidden bg-tertiary text-on-tertiary text-sm font-bold px-4 py-1.5 rounded-full shadow-sm"></span>
+</h2>
+<p class="text-on-surface-variant text-lg leading-relaxed opacity-80">Administra los accesos y supervisa el estado del Atelier Académico.</p>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input id="searchInput" class="pl-12 pr-6 py-3 bg-surface-container-low border-none rounded-xl w-72 focus:ring-2 focus:ring-surface-tint/20 transition-all placeholder:text-outline-variant" placeholder="Buscar por nombre o correo..." type="text"/>
+</div>
+<select id="filterRol" class="bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-surface-tint/20 transition-all">
+    <option value="">Todos los roles</option>
+    <option value="ADMIN">Administrador</option>
+    <option value="PROFESOR">Profesor</option>
+    <option value="ESTUDIANTE">Estudiante</option>
+</select>
+<button onclick="openCreateUserModal()" class="bg-primary text-on-primary px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:shadow-lg transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+                        Agregar Usuario
+                    </button>
+</div>
+</div>
+<!-- Data Table Module -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(0,32,69,0.04)]">
+<div class="overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-8 py-5 text-left text-xs font-bold text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/5">ID</th>
+<th class="px-8 py-5 text-left text-xs font-bold text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/5">Nombre</th>
+<th class="px-8 py-5 text-left text-xs font-bold text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/5">Correo</th>
+<th class="px-8 py-5 text-left text-xs font-bold text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/5">Rol</th>
+<th class="px-8 py-5 text-left text-xs font-bold text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/5">Estado</th>
+<th class="px-8 py-5 text-right text-xs font-bold text-on-surface-variant uppercase tracking-widest border-b border-outline-variant/5">Acciones</th>
+</tr>
+</thead>
+<tbody id="users-tbody" class="divide-y divide-surface-container">
+<tr><td colspan="6" class="p-8 text-center text-on-surface-variant font-medium">Cargando usuarios...</td></tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Footer -->
+<div id="pagination-footer" class="px-8 py-6 bg-surface-container-low/30 flex items-center justify-between">
+<span id="pagination-info" class="text-sm text-on-surface-variant font-medium">Cargando...</span>
+<div id="pagination-controls" class="flex items-center gap-1">
+</div>
+</div>
+<!-- Stats Cards -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 px-8 pb-8">
+<div class="p-8 bg-white rounded-xl shadow-[0px_12px_32px_rgba(0,32,69,0.03)] border border-outline-variant/5">
+<span class="text-xs font-bold text-surface-tint uppercase tracking-widest block mb-1">Población Total</span>
+<div class="flex items-end justify-between">
+<span id="stat-total" class="text-3xl font-extrabold text-on-surface tracking-tighter">-</span>
+</div>
+</div>
+<div class="p-8 bg-white rounded-xl shadow-[0px_12px_32px_rgba(0,32,69,0.03)] border border-outline-variant/5">
+<span class="text-xs font-bold text-surface-tint uppercase tracking-widest block mb-1">Usuarios Activos</span>
+<div class="flex items-end justify-between">
+<span id="stat-active" class="text-3xl font-extrabold text-on-surface tracking-tighter">-</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+<!-- Create User Modal -->
+<div id="createUserModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+    <div class="bg-surface rounded-2xl w-full max-w-lg p-8 shadow-2xl relative">
+        <button onclick="document.getElementById('createUserModal').classList.add('hidden')" class="absolute top-4 right-4 text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <h2 class="text-2xl font-bold font-headline mb-6 text-on-surface">Agregar Nuevo Usuario</h2>
+        <form id="createUserForm" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Nombre</label>
+                    <input type="text" id="addFirstName" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Apellido</label>
+                    <input type="text" id="addLastName" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Correo Electrónico</label>
+                <input type="email" id="addEmail" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Contraseña temporal</label>
+                <input type="password" id="addPassword" required minlength="6" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Identificación</label>
+                    <input type="text" id="addIdentificacion" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Teléfono</label>
+                    <input type="tel" id="addTelefono" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Rol</label>
+                <select id="addRol" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                    <option value="ESTUDIANTE">Estudiante</option>
+                    <option value="PROFESOR">Profesor</option>
+                    <option value="ADMIN">Administrador</option>
+                </select>
+            </div>
+            <button type="submit" class="w-full bg-primary text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 mt-8 hover:bg-primary/90 transition-colors">
+                <span class="material-symbols-outlined shrink-0" data-icon="save">save</span>
+                Guardar Usuario
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div id="editUserModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+    <div class="bg-surface rounded-2xl w-full max-w-lg p-8 shadow-2xl relative">
+        <button onclick="document.getElementById('editUserModal').classList.add('hidden')" class="absolute top-4 right-4 text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-colors">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <h2 class="text-2xl font-bold font-headline mb-6 text-on-surface">Editar Usuario</h2>
+        <form id="editUserForm" class="space-y-4">
+            <input type="hidden" id="editUserId">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Nombre</label>
+                    <input type="text" id="editFirstName" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Apellido</label>
+                    <input type="text" id="editLastName" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Correo Electrónico</label>
+                <input type="email" id="editEmail" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Identificación</label>
+                    <input type="text" id="editIdentificacion" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Teléfono</label>
+                    <input type="tel" id="editTelefono" class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Rol</label>
+                <select id="editRol" required class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                    <option value="ESTUDIANTE">Estudiante</option>
+                    <option value="PROFESOR">Profesor</option>
+                    <option value="ADMIN">Administrador</option>
+                </select>
+            </div>
+            <button type="submit" class="w-full bg-primary text-on-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 mt-8 hover:bg-primary/90 transition-colors">
+                <span class="material-symbols-outlined shrink-0" data-icon="save">save</span>
+                Guardar Cambios
+            </button>
+        </form>
+    </div>
+</div>
+
+<script src="/static/js/api.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!Auth.requireAuth()) return;
+    wireLogout();
+
+    const currentUser = Auth.getUser();
+    if (currentUser.rol !== 'ADMIN') {
+        Auth.redirectByRole(currentUser.rol);
+        return;
+    }
+    document.getElementById('nav-user-name').textContent = `${currentUser.first_name} ${currentUser.last_name || ''}`;
+    document.getElementById('nav-user-role').textContent = currentUser.rol;
+    document.getElementById('nav-user-initial').textContent = currentUser.first_name ? currentUser.first_name[0].toUpperCase() : 'U';
+
+    const tbody = document.getElementById('users-tbody');
+    const ROWS_PER_PAGE = 10;
+    let allUsers = [];
+    let filteredUsers = [];
+    let currentPage = 1;
+
+    // ============ RENDER TABLE ============
+    const renderTable = () => {
+        const start = (currentPage - 1) * ROWS_PER_PAGE;
+        const end = start + ROWS_PER_PAGE;
+        const pageUsers = filteredUsers.slice(start, end);
+
+        if (filteredUsers.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-on-surface-variant font-medium">No se encontraron usuarios.</td></tr>';
+            renderPagination();
+            return;
+        }
+
+        tbody.innerHTML = '';
+        const roleColors = {
+            'ADMIN': 'bg-primary-container text-on-primary-container',
+            'PROFESOR': 'bg-surface-container-high text-on-surface-variant',
+            'ESTUDIANTE': 'bg-secondary-container text-on-secondary-container'
+        };
+
+        pageUsers.forEach(user => {
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-surface-container-low transition-colors group';
+            const initials = (user.first_name?.[0] || '') + (user.last_name?.[0] || '');
+            tr.innerHTML = `
+                <td class="px-8 py-6 text-sm font-medium text-outline">#${user.identificacion}</td>
+                <td class="px-8 py-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-tertiary-fixed-dim flex items-center justify-center text-on-tertiary-fixed font-bold text-xs">${initials || 'U'}</div>
+                        <span class="font-semibold text-on-surface">${user.first_name} ${user.last_name}</span>
+                    </div>
+                </td>
+                <td class="px-8 py-6 text-sm text-on-surface-variant">${user.email}</td>
+                <td class="px-8 py-6">
+                    <span class="px-3 py-1 ${roleColors[user.rol] || 'bg-outline text-white'} text-[10px] font-bold uppercase tracking-wider rounded-full">${user.rol}</span>
+                </td>
+                <td class="px-8 py-6">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full ${user.is_active ? 'bg-green-500' : 'bg-outline'}"></span>
+                        <span class="text-sm font-medium ${user.is_active ? 'text-on-surface' : 'text-on-surface-variant'}">${user.is_active ? 'Activo' : 'Inactivo'}</span>
+                    </div>
+                </td>
+                <td class="px-8 py-6 text-right">
+                    <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        ${!user.is_active ? `
+                        <button onclick="approveUser(${user.id})" class="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors" title="Aprobar Solicitud">
+                            <span class="material-symbols-outlined text-xl">check_circle</span>
+                        </button>
+                        ` : ''}
+                        <button onclick="editUser(${user.id})" class="p-2 text-surface-tint hover:bg-surface-container-high rounded-lg transition-colors" title="Editar Usuario">
+                            <span class="material-symbols-outlined text-xl">edit</span>
+                        </button>
+                        <button onclick="deleteUser(${user.id})" class="p-2 text-error hover:bg-error-container/20 rounded-lg transition-colors" title="Eliminar Usuario">
+                            <span class="material-symbols-outlined text-xl">delete</span>
+                        </button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+        renderPagination();
+    };
+
+    // ============ PAGINATION ============
+    const renderPagination = () => {
+        const totalPages = Math.ceil(filteredUsers.length / ROWS_PER_PAGE) || 1;
+        const start = (currentPage - 1) * ROWS_PER_PAGE + 1;
+        const end = Math.min(currentPage * ROWS_PER_PAGE, filteredUsers.length);
+
+        document.getElementById('pagination-info').textContent =
+            filteredUsers.length > 0
+                ? `Mostrando ${start}-${end} de ${filteredUsers.length} usuarios`
+                : 'Sin resultados';
+
+        const controls = document.getElementById('pagination-controls');
+        controls.innerHTML = '';
+
+        // Prev button
+        const prevBtn = document.createElement('button');
+        prevBtn.className = `p-2 hover:bg-surface-container-high rounded-lg transition-colors ${currentPage <= 1 ? 'text-outline/30 pointer-events-none' : 'text-outline'}`;
+        prevBtn.innerHTML = '<span class="material-symbols-outlined">chevron_left</span>';
+        prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderTable(); } };
+        controls.appendChild(prevBtn);
+
+        // Page buttons
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement('button');
+            btn.className = i === currentPage
+                ? 'w-8 h-8 bg-primary text-on-primary rounded-lg text-xs font-bold'
+                : 'w-8 h-8 hover:bg-surface-container-high rounded-lg text-xs font-bold text-on-surface-variant';
+            btn.textContent = i;
+            btn.onclick = () => { currentPage = i; renderTable(); };
+            controls.appendChild(btn);
+        }
+
+        // Next button
+        const nextBtn = document.createElement('button');
+        nextBtn.className = `p-2 hover:bg-surface-container-high rounded-lg transition-colors ${currentPage >= totalPages ? 'text-outline/30 pointer-events-none' : 'text-outline'}`;
+        nextBtn.innerHTML = '<span class="material-symbols-outlined">chevron_right</span>';
+        nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderTable(); } };
+        controls.appendChild(nextBtn);
+    };
+
+    // ============ SEARCH & FILTER ============
+    const applyFilters = () => {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+        const rolFilter = document.getElementById('filterRol').value;
+
+        filteredUsers = allUsers.filter(u => {
+            const matchesSearch = !searchTerm ||
+                `${u.first_name} ${u.last_name}`.toLowerCase().includes(searchTerm) ||
+                u.email.toLowerCase().includes(searchTerm) ||
+                u.identificacion.toLowerCase().includes(searchTerm);
+            const matchesRol = !rolFilter || u.rol === rolFilter;
+            return matchesSearch && matchesRol;
+        });
+
+        currentPage = 1;
+        renderTable();
+    };
+
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    document.getElementById('filterRol').addEventListener('change', applyFilters);
+
+    // ============ LOAD USERS ============
+    const loadUsers = async () => {
+        tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-on-surface-variant font-medium">Cargando usuarios...</td></tr>';
+        try {
+            const users = await apiGet('/usuarios/');
+            if (!users) return;
+            allUsers = users;
+            filteredUsers = [...allUsers];
+
+            // Update stats
+            document.getElementById('stat-total').textContent = allUsers.length;
+            document.getElementById('stat-active').textContent = allUsers.filter(u => u.is_active).length;
+
+            // Pending badge
+            const pendingCount = allUsers.filter(u => !u.is_active).length;
+            const badge = document.getElementById('pending-badge');
+            if (pendingCount > 0) {
+                badge.textContent = `${pendingCount} Solicitudes Pendientes`;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            applyFilters();
+        } catch (e) {
+            tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-error font-medium">Error al cargar usuarios.</td></tr>';
+        }
+    };
+
+    // ============ APPROVE USER ============
+    window.approveUser = async (id) => {
+        if (!confirm('¿Deseas aprobar esta solicitud de matrícula?')) return;
+        try {
+            const res = await apiPatch(`/usuarios/${id}/`, { is_active: true });
+            if (res && res.ok) {
+                showToast("Usuario aprobado correctamente.");
+                loadUsers();
+            } else {
+                showToast("Error al aprobar usuario.", "error");
+            }
+        } catch(e) {
+            showToast("Error de red.", "error");
+        }
+    };
+
+    // ============ DELETE USER ============
+    window.deleteUser = async (id) => {
+        if (id === currentUser.id) {
+            showToast("No puedes eliminar tu propio usuario.", "error");
+            return;
+        }
+        if (!confirm('¿Estás seguro de que deseas eliminar este usuario?')) return;
+        try {
+            const res = await apiDelete(`/usuarios/${id}/`);
+            if (res && res.ok) {
+                showToast("Usuario eliminado.");
+                loadUsers();
+            } else {
+                showToast("Error eliminando usuario.", "error");
+            }
+        } catch(e) {
+            showToast("Error de red.", "error");
+        }
+    };
+
+    // ============ EDIT USER ============
+    window.editUser = (id) => {
+        const user = allUsers.find(u => u.id === id);
+        if (!user) return;
+        document.getElementById('editUserId').value = user.id;
+        document.getElementById('editFirstName').value = user.first_name;
+        document.getElementById('editLastName').value = user.last_name;
+        document.getElementById('editEmail').value = user.email;
+        document.getElementById('editIdentificacion').value = user.identificacion;
+        document.getElementById('editTelefono').value = user.telefono || '';
+        document.getElementById('editRol').value = user.rol;
+        document.getElementById('editUserModal').classList.remove('hidden');
+    };
+
+    document.getElementById('editUserForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('editUserId').value;
+        const data = {
+            first_name: document.getElementById('editFirstName').value,
+            last_name: document.getElementById('editLastName').value,
+            email: document.getElementById('editEmail').value,
+            identificacion: document.getElementById('editIdentificacion').value,
+            telefono: document.getElementById('editTelefono').value,
+            rol: document.getElementById('editRol').value,
+        };
+
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = 'Guardando...';
+
+        try {
+            const res = await apiPatch(`/usuarios/${id}/`, data);
+            if (res && res.ok) {
+                showToast('Usuario actualizado correctamente.');
+                document.getElementById('editUserModal').classList.add('hidden');
+                loadUsers();
+            } else {
+                const errorMsg = res?.data?.detail || res?.data?.identificacion?.[0] || res?.data?.email?.[0] || 'Error al actualizar usuario.';
+                showToast(errorMsg, 'error');
+            }
+        } catch (err) {
+            showToast('Error de red al actualizar usuario.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<span class="material-symbols-outlined">save</span> Guardar Cambios';
+        }
+    });
+
+    // ============ CREATE USER ============
+    window.openCreateUserModal = () => {
+        document.getElementById('createUserForm').reset();
+        document.getElementById('createUserModal').classList.remove('hidden');
+    };
+
+    document.getElementById('createUserForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const baseEmail = document.getElementById('addEmail').value;
+        const data = {
+            first_name: document.getElementById('addFirstName').value,
+            last_name: document.getElementById('addLastName').value,
+            email: baseEmail,
+            password: document.getElementById('addPassword').value,
+            identificacion: document.getElementById('addIdentificacion').value,
+            telefono: document.getElementById('addTelefono').value || "0000000",
+            rol: document.getElementById('addRol').value,
+            username: baseEmail.split('@')[0] + Math.floor(Math.random() * 1000)
+        };
+
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = 'Guardando...';
+
+        try {
+            const res = await apiFetch('/auth/register/', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            const resData = res ? await res.json() : null;
+
+            if (res && res.ok && resData && resData.user) {
+                showToast('Usuario creado correctamente.');
+                document.getElementById('createUserModal').classList.add('hidden');
+                document.getElementById('createUserForm').reset();
+                loadUsers();
+            } else {
+                const errorMsg = resData?.identificacion?.[0] || resData?.email?.[0] || resData?.username?.[0] || 'Error al crear usuario. Verifica los campos.';
+                showToast(errorMsg, 'error');
+            }
+        } catch (err) {
+            console.error(err);
+            showToast('Error de red al crear usuario.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<span class="material-symbols-outlined">save</span> Guardar Usuario';
+        }
+    });
+
+    // ============ INIT ============
+    loadUsers();
+});
+</script>
+</body></html>

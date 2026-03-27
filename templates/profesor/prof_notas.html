@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grade Management | The Academic Atelier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#f7f9fb",
+              "error": "#ba1a1a",
+              "tertiary-container": "#4f2e00",
+              "on-tertiary-fixed": "#2b1700",
+              "surface-bright": "#f7f9fb",
+              "on-primary-fixed-variant": "#2d476f",
+              "primary": "#002045",
+              "surface-container-high": "#e6e8ea",
+              "on-tertiary-fixed-variant": "#633f0f",
+              "on-tertiary": "#ffffff",
+              "inverse-surface": "#2d3133",
+              "secondary-fixed-dim": "#b7c8e1",
+              "tertiary": "#321b00",
+              "on-primary-container": "#86a0cd",
+              "outline-variant": "#c4c6cf",
+              "background": "#f7f9fb",
+              "primary-fixed-dim": "#adc7f7",
+              "surface-container": "#eceef0",
+              "secondary-container": "#d0e1fb",
+              "on-primary-fixed": "#001b3c",
+              "on-surface-variant": "#43474e",
+              "inverse-primary": "#adc7f7",
+              "on-tertiary-container": "#c6955e",
+              "inverse-on-surface": "#eff1f3",
+              "surface-container-highest": "#e0e3e5",
+              "secondary": "#505f76",
+              "surface-dim": "#d8dadc",
+              "on-surface": "#191c1e",
+              "tertiary-fixed": "#ffddba",
+              "tertiary-fixed-dim": "#f2bc82",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-container": "#54647a",
+              "on-secondary-fixed-variant": "#38485d",
+              "surface-tint": "#455f88",
+              "error-container": "#ffdad6",
+              "surface-variant": "#e0e3e5",
+              "surface-container-low": "#f2f4f6",
+              "on-primary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "primary-container": "#1a365d",
+              "outline": "#74777f",
+              "secondary-fixed": "#d3e4fe",
+              "on-error": "#ffffff",
+              "on-secondary-fixed": "#0b1c30",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#d6e3ff",
+              "on-background": "#191c1e"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f7f9fb;
+      }
+      h1, h2, h3 {
+        font-family: 'Manrope', sans-serif;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e0e3e5;
+        border-radius: 10px;
+      }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-[#eceef0] p-6 space-y-4 z-50">
+    <div class="mb-8 px-2">
+        <h1 class="text-lg font-extrabold text-[#1A365D] font-headline tracking-tight">Academic Atelier</h1>
+        <p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold opacity-60">Módulo de Gestión</p>
+    </div>
+    <nav class="flex-1 space-y-2">
+        <a class="flex items-center gap-3 px-4 py-3 text-[#191c1e] opacity-80 hover:opacity-100 hover:bg-[#e6e8ea] rounded-lg transition-all duration-200 group" href="/dashboard/profesor/cursos/">
+            <span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+            <span class="font-medium text-sm group-hover:translate-x-1 transition-transform">Cursos</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 bg-white text-[#1A365D] shadow-sm font-semibold rounded-lg transition-all duration-200 group" href="/dashboard/profesor/notas/">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;" data-icon="grade">grade</span>
+            <span class="font-medium text-sm">Calificaciones</span>
+        </a>
+    </nav>
+    <div class="mt-auto">
+        <button onclick="Auth.logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-error/10 hover:bg-error text-error hover:text-white rounded-lg transition-all font-semibold font-['Inter'] text-sm shadow-sm md:justify-start">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">logout</span>
+            <span>Cerrar Sesión</span>
+        </button>
+    </div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-64 min-h-screen bg-surface">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center px-8 py-4 bg-white/80 dark:bg-[#191c1e]/80 backdrop-blur-md z-40 shadow-[0px_12px_32px_rgba(0,32,69,0.06)]">
+    <div class="flex items-center gap-6">
+        <span class="text-xl font-bold text-[#191c1e] dark:text-[#f7f9fb] font-['Manrope'] tracking-tight">Plataforma Académica</span>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 group cursor-pointer">
+            <div class="text-right">
+                <p id="nav-user-name" class="text-sm font-bold text-on-surface">Cargando...</p>
+                <p id="nav-user-role" class="text-[10px] text-on-surface-variant font-medium uppercase tracking-wider">Cargando...</p>
+            </div>
+            <div id="nav-user-initial" class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold">U</div>
+        </div>
+    </div>
+</header>
+<!-- Content Canvas -->
+<div class="px-12 py-10 max-w-7xl mx-auto">
+<!-- Hero / Breadcrumb Section -->
+<div class="mb-12">
+<div class="flex items-center gap-2 text-sm font-label text-on-surface-variant mb-4">
+<a href="/dashboard/profesor/" class="hover:underline">Cursos</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span id="course-title-breadcrumb" class="text-primary font-semibold">Seleccionar Curso</span>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<h1 class="text-4xl font-extrabold text-primary font-headline mb-2">Gestión de Notas</h1>
+<p class="text-on-surface-variant max-w-xl">Administre y actualice las calificaciones de sus estudiantes. Los cambios se guardan localmente hasta confirmarlos con el botón principal.</p>
+</div>
+<div class="flex gap-3">
+<button id="export-xlsx-btn" class="px-6 py-2.5 bg-surface-container-high text-primary font-semibold rounded-lg hover:bg-surface-container-highest transition-colors font-label flex items-center gap-2">
+    <span class="material-symbols-outlined text-sm">download</span>
+    Exportar Excel (.xlsx)
+</button>
+<button id="save-grades-btn" class="px-8 py-2.5 bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold rounded-lg shadow-lg hover:opacity-90 transition-all font-label flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">save</span>
+                            Guardar Cambios
+                        </button>
+</div>
+</div>
+</div>
+<!-- Stats & Filter Row (Asymmetric Layout) -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-8 rounded-xl shadow-sm flex items-center justify-between">
+<div class="space-y-1">
+<p class="text-xs font-label uppercase tracking-widest text-on-surface-variant">Promedio Clase</p>
+<h3 id="stat-avg" class="text-3xl font-extrabold text-primary font-headline">--</h3>
+</div>
+<div class="h-12 w-[1px] bg-outline-variant/30"></div>
+<div class="space-y-1">
+<p class="text-xs font-label uppercase tracking-widest text-on-surface-variant">Notas Pendientes</p>
+<h3 id="stat-pending" class="text-3xl font-extrabold text-tertiary-container font-headline">--</h3>
+</div>
+<div class="h-12 w-[1px] bg-outline-variant/30"></div>
+<div class="space-y-1">
+<p class="text-xs font-label uppercase tracking-widest text-on-surface-variant">Tasa Completitud</p>
+<h3 id="stat-rate" class="text-3xl font-extrabold text-primary font-headline">--</h3>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-4 bg-primary text-white p-8 rounded-xl shadow-lg relative overflow-hidden flex flex-col justify-between">
+<div class="z-10">
+<p class="text-xs font-label uppercase tracking-widest opacity-70 mb-1">Próximo Cierre</p>
+<h4 class="text-xl font-bold font-headline">Corte Académico</h4>
+<p class="text-sm opacity-80 mt-2">Fin de Semestre</p>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined !text-8xl">history_edu</span>
+</div>
+</div>
+</div>
+<!-- Grade Table Container -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden mb-12">
+<div class="px-8 py-6 border-b border-surface-container flex justify-between items-center">
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input id="search-student" class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-surface-tint/30 font-label" placeholder="Buscar alumnos..." type="text"/>
+</div>
+<div class="flex gap-4">
+<button id="add-note-btn" class="flex items-center gap-2 px-4 py-2 bg-primary-container text-on-primary-container rounded-lg font-bold text-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">add</span> Añadir Evaluación
+</button>
+<button id="remove-note-btn" title="Eliminar Evaluación" class="p-2 bg-error/10 rounded-lg text-error hover:bg-error/20 transition-colors">
+    <span class="material-symbols-outlined">delete_sweep</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full border-collapse">
+<thead id="grades-thead">
+<!-- Header injected by JS -->
+</thead>
+<tbody id="grades-tbody" class="divide-y divide-surface-container">
+<!-- Rows injected by JS -->
+</tbody>
+</table>
+</div>
+<div class="px-8 py-6 border-t border-surface-container flex justify-between items-center text-sm font-label text-on-surface-variant">
+<p id="pagination-info">Mostrando todos los estudiantes.</p>
+</div>
+</div>
+<!-- Footer Meta Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">info</span>
+<h4 class="font-bold text-primary">Reglas de Evaluación</h4>
+</div>
+<ul class="text-xs font-label text-on-surface-variant space-y-3">
+<li class="flex justify-between"><span>Promedio</span><span class="font-bold">Equivalente</span></li>
+<li class="flex justify-between"><span id="evaluation-rules-text">Todas las notas valen</span><span class="font-bold" id="evaluation-weight-text">-</span></li>
+<li class="flex justify-between border-t border-outline-variant/20 pt-2"><span>Definitiva</span><span class="font-bold">100%</span></li>
+</ul>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">info</span>
+<h4 class="font-bold text-primary">Estados</h4>
+</div>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="h-2 w-2 rounded-full bg-surface-tint mt-1.5"></div>
+<div class="flex-1">
+<p class="text-xs font-bold text-primary">Aprobado</p>
+<p class="text-[10px] text-on-surface-variant">Nota definitiva igual o mayor a 3.0</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="h-2 w-2 rounded-full bg-error mt-1.5"></div>
+<div class="flex-1">
+<p class="text-xs font-bold text-primary">Reprobado</p>
+<p class="text-[10px] text-on-surface-variant">Nota definitiva menor a 3.0</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-primary-container !text-4xl mb-4">cloud_sync</span>
+<p class="text-sm font-bold text-primary mb-1">Guardado Local Activo</p>
+<p class="text-xs text-on-surface-variant px-4">Los borradores se mantienen en pantalla. Debe usar el botón principal para confirmar los cambios.</p>
+</div>
+</div>
+<script src="/static/js/api.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!Auth.requireAuth()) return;
+    
+    const params = new URLSearchParams(window.location.search);
+    const cursoId = params.get('curso');
+    const tbody = document.getElementById('grades-tbody');
+    const thead = document.getElementById('grades-thead');
+    const breadcrumb = document.getElementById('course-title-breadcrumb');
+    
+    let maxNotes = 1;
+    let currentCourseCode = "Reporte";
+
+    // Prof Info
+    const currentUser = Auth.getUser();
+    if (currentUser) {
+        document.getElementById('nav-user-name').textContent = `${currentUser.first_name} ${currentUser.last_name || ''}`;
+        document.getElementById('nav-user-role').textContent = currentUser.rol;
+        document.getElementById('nav-user-initial').textContent = currentUser.first_name ? currentUser.first_name[0].toUpperCase() : 'U';
+    }
+
+    if (!cursoId) {
+        tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-error">No hay curso seleccionado. Vuelva a Cursos.</td></tr>';
+        return;
+    }
+
+    let allGrades = [];
+
+    const renderGrades = (filterText = '') => {
+        if (!allGrades || allGrades.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="${maxNotes + 3}" class="p-8 text-center text-on-surface-variant">No hay estudiantes matriculados.</td></tr>`;
+            
+            // Re-render empty stats
+            document.getElementById('stat-avg').textContent = '0.0';
+            document.getElementById('stat-pending').textContent = '0';
+            document.getElementById('stat-rate').textContent = '0%';
+            return;
+        }
+
+        const filtered = allGrades.filter(g => {
+            const search = filterText.toLowerCase();
+            return (g.estudiante_nombre && g.estudiante_nombre.toLowerCase().includes(search)) || 
+                   (g.estudiante && String(g.estudiante).includes(search));
+        });
+
+        // RE-BUILD HEADER DYNAMICALLY
+        let headHtml = `
+        <tr class="bg-surface-container-low/50">
+            <th class="text-left px-8 py-4 text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold">Estudiante</th>
+        `;
+        for (let i = 0; i < maxNotes; i++) {
+            headHtml += `<th class="text-center px-4 py-4 text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold">Nota ${i + 1}</th>`;
+        }
+        headHtml += `
+            <th class="text-center px-4 py-4 text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold">Estado</th>
+            <th class="text-right px-8 py-4 text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold">Definitiva</th>
+        </tr>
+        `;
+        thead.innerHTML = headHtml;
+
+        tbody.innerHTML = '';
+        
+        let totalSum = 0;
+        let pendingCount = 0;
+        let validCount = 0;
+
+        filtered.forEach((g, index) => {
+            let recordSum = 0;
+            let recordEmptyCount = 0;
+
+            // Compute sum of existing inputs internally
+            for (let i = 0; i < maxNotes; i++) {
+                const val = (g.notas && g.notas[i] !== undefined) ? parseFloat(g.notas[i]) : 0.0;
+                recordSum += val;
+                if (val === 0.0) recordEmptyCount++;
+            }
+            
+            const finalGrade = (recordSum / maxNotes).toFixed(2);
+            const isApproved = finalGrade >= 3.0;
+            const statusColor = isApproved ? 'text-green-600 bg-green-100' : 'text-error bg-error-container/20';
+            const statusText = isApproved ? 'Aprobado' : 'Reprobado';
+            
+            totalSum += parseFloat(finalGrade);
+            if (recordEmptyCount === maxNotes) pendingCount++;
+            else validCount++;
+
+            const studentInitial = g.estudiante_nombre ? g.estudiante_nombre[0] : 'U';
+            const bgClass = ['bg-secondary-container text-on-secondary-container', 'bg-tertiary-fixed text-on-tertiary-fixed', 'bg-primary-fixed text-on-primary-fixed', 'bg-secondary-fixed-dim text-on-secondary-fixed'][index % 4];
+            
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-surface-container-low transition-colors group';
+            
+            let rowHtml = `
+                <td class="px-8 py-4">
+                    <div class="flex items-center gap-4">
+                        <div class="h-10 w-10 rounded-full ${bgClass} flex items-center justify-center font-bold text-sm">${studentInitial}</div>
+                        <div>
+                            <p class="font-bold text-primary font-label text-sm">${g.estudiante_nombre}</p>
+                            <p class="text-xs text-on-surface-variant font-label">ID: #${g.estudiante}</p>
+                        </div>
+                    </div>
+                </td>
+            `;
+
+            for (let i = 0; i < maxNotes; i++) {
+                const val = (g.notas && g.notas[i] !== undefined) ? g.notas[i] : 0.0;
+                rowHtml += `
+                <td class="px-4 py-4 text-center">
+                    <input id="nota-${i}-${g.estudiante}" type="number" step="0.1" max="5.0" min="0" value="${val}"
+                    oninput="if(this.value>5)this.value=5.0; if(this.value<0)this.value=0.0;"
+                    class="w-20 mx-auto bg-surface-container-low border-none rounded-md px-2 py-1.5 text-center text-sm font-semibold focus:ring-2 focus:ring-surface-tint/40" />
+                </td>
+                `;
+            }
+
+            rowHtml += `
+                <td class="px-4 py-4 text-center text-sm font-bold">
+                    <span class="inline-flex items-center px-3 py-1 ${statusColor} rounded-full text-xs font-bold">${statusText}</span>
+                </td>
+                <td class="px-8 py-4 text-right">
+                    <span class="inline-flex items-center px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full text-xs font-bold">${finalGrade}</span>
+                </td>
+            `;
+            
+            tr.innerHTML = rowHtml;
+            tbody.appendChild(tr);
+        });
+
+        // Update stats
+        if (filtered.length > 0) {
+            document.getElementById('stat-avg').textContent = (totalSum / filtered.length).toFixed(1);
+            document.getElementById('stat-pending').textContent = pendingCount;
+            document.getElementById('stat-rate').textContent = `${Math.round((validCount / filtered.length) * 100)}%`;
+        } else {
+            document.getElementById('stat-avg').textContent = '0.0';
+            document.getElementById('stat-pending').textContent = '0';
+            document.getElementById('stat-rate').textContent = '0%';
+        }
+
+        document.getElementById('pagination-info').textContent = `Mostrando ${filtered.length} estudiantes.`;
+
+        // Update weighing rules
+        const weight = (100 / maxNotes).toFixed(1);
+        document.getElementById('evaluation-rules-text').textContent = `Cada nota equivale al ${weight}%`;
+        document.getElementById('evaluation-weight-text').textContent = `${weight}%`;
+    };
+
+    try {
+        // Fetch report which includes students and their valid grades
+        const reportData = await apiGet(`/reportes/curso/${cursoId}/`);
+        
+        if (reportData) {
+            breadcrumb.textContent = `${reportData.curso.codigo} - ${reportData.curso.nombre}`;
+            
+            let globalMax = 1;
+            
+            // Merge students with existing grades
+            const mergedGrades = reportData.estudiantes.map(est => {
+                const existingGrade = reportData.calificaciones.find(c => c.estudiante === est.id);
+                if (existingGrade) {
+                    // Update global max dynamically
+                    if (existingGrade.notas && Array.isArray(existingGrade.notas)) {
+                        globalMax = Math.max(globalMax, existingGrade.notas.length);
+                    } else {
+                        existingGrade.notas = [0.0];
+                    }
+                    return existingGrade;
+                }
+                // Empty template
+                return {
+                    id: null,
+                    estudiante: est.id,
+                    estudiante_nombre: `${est.first_name} ${est.last_name}`,
+                    notas: []
+                };
+            });
+            
+            maxNotes = Math.max(1, globalMax);
+            
+            // Normalize all empty notes to maxNotes
+            mergedGrades.forEach(g => {
+                while(g.notas.length < maxNotes) {
+                    g.notas.push(0.0);
+                }
+            });
+
+            allGrades = mergedGrades;
+            window.currentGrades = mergedGrades;
+            currentCourseCode = reportData.curso.codigo;
+            renderGrades();
+        }
+
+    } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-error">Error al cargar notas.</td></tr>';
+    }
+
+    document.getElementById('search-student').addEventListener('input', (e) => {
+        renderGrades(e.target.value);
+    });
+
+    // Añadir Evaluación (Columna Extra)
+    document.getElementById('add-note-btn').addEventListener('click', () => {
+        maxNotes++;
+        window.currentGrades.forEach(g => {
+            // Re-sync existing inputs before adding new col to prevent loss
+            for (let i = 0; i < maxNotes - 1; i++) {
+                const input = document.getElementById(`nota-${i}-${g.estudiante}`);
+                if(input) g.notas[i] = parseFloat(input.value) || 0.0;
+            }
+            g.notas.push(0.0);
+        });
+        renderGrades(document.getElementById('search-student').value);
+    });
+
+    // Eliminar Evaluación
+    document.getElementById('remove-note-btn').addEventListener('click', () => {
+        if (maxNotes <= 1) {
+            showToast("Debe haber al menos una evaluación.", "error");
+            return;
+        }
+        
+        const col = prompt(`¿Qué número de evaluación desea eliminar? (1 a ${maxNotes})`);
+        if (!col) return;
+        
+        const idx = parseInt(col) - 1;
+        if (isNaN(idx) || idx < 0 || idx >= maxNotes) {
+            showToast("Número de evaluación inválido.", "error");
+            return;
+        }
+
+        if (confirm(`¿Está seguro de eliminar la 'Nota ${col}' de todos los estudiantes? Esta acción no se puede deshacer sin recargar.`)) {
+            maxNotes--;
+            window.currentGrades.forEach(g => {
+                // Re-sync and remove
+                for (let i = 0; i < maxNotes + 1; i++) {
+                    const input = document.getElementById(`nota-${i}-${g.estudiante}`);
+                    if(input) g.notas[i] = parseFloat(input.value) || 0.0;
+                }
+                g.notas.splice(idx, 1);
+            });
+            renderGrades(document.getElementById('search-student').value);
+            showToast(`Evaluación ${col} eliminada localmente.`);
+        }
+    });
+
+    // XLSX Export
+    document.getElementById('export-xlsx-btn').addEventListener('click', () => {
+        if (!window.currentGrades || window.currentGrades.length === 0) {
+            showToast("No hay datos para exportar.", "error");
+            return;
+        }
+
+        const dataToExport = window.currentGrades.map(g => {
+            const row = {
+                'Estudiante': g.estudiante_nombre,
+                'ID': g.estudiante
+            };
+            
+            let sum = 0;
+            g.notas.forEach((n, i) => {
+                row[`Nota ${i + 1}`] = parseFloat(n) || 0;
+                sum += (parseFloat(n) || 0);
+            });
+            
+            row['Definitiva'] = (sum / maxNotes).toFixed(2);
+            row['Estado'] = row['Definitiva'] >= 3.0 ? 'Aprobado' : 'Reprobado';
+            
+            return row;
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Calificaciones");
+        
+        const fileName = `Reporte_Notas_${currentCourseCode}_${new Date().toISOString().split('T')[0]}.xlsx`;
+        XLSX.writeFile(workbook, fileName);
+        showToast("Archivo Excel generado con éxito.");
+    });
+    
+    document.getElementById('save-grades-btn').addEventListener('click', async () => {
+        if (!window.currentGrades) return;
+        const btn = document.getElementById('save-grades-btn');
+        const ogText = btn.innerHTML;
+        btn.innerHTML = 'Guardando...';
+        btn.disabled = true;
+
+        let ok = true;
+        const promises = [];
+        
+        for (let g of window.currentGrades) {
+            const newNotas = [];
+            let changed = false;
+
+            for (let i = 0; i < maxNotes; i++) {
+                const val = parseFloat(document.getElementById(`nota-${i}-${g.estudiante}`).value) || 0.0;
+                newNotas.push(val);
+                // Simple difference check
+                if (parseFloat(g.notas[i]) !== val) changed = true;
+            }
+            
+            // Add or patch grade only if something was input/modified or it enforces creation
+            if (changed || !g.id) {
+                if (g.id) {
+                    // Existing grade -> PATCH
+                    promises.push(apiFetch(`/calificaciones/${g.id}/`, {
+                        method: 'PATCH',
+                        body: JSON.stringify({ notas: newNotas })
+                    }).then(res => { if (!res) ok = false; }));
+                } else {
+                    // New grade -> POST
+                    promises.push(apiFetch(`/calificaciones/`, {
+                        method: 'POST',
+                        body: JSON.stringify({ estudiante: g.estudiante, curso: cursoId, notas: newNotas })
+                    }).then(res => { if (!res) ok = false; }));
+                }
+            }
+        }
+        
+        await Promise.all(promises);
+        
+        btn.innerHTML = ogText;
+        btn.disabled = false;
+
+        if (ok) {
+            showToast("Notas actualizadas exitosamente.");
+            setTimeout(() => window.location.reload(), 1000);
+        } else {
+            showToast("Hubo un error al actualizar algunas notas.", "error");
+        }
+    });
+
+});
+</script>
+</main>
+</body></html>

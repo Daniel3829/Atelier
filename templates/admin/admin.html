@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Academic Atelier | Panel de Administración</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#f7f9fb",
+              "error": "#ba1a1a",
+              "tertiary-container": "#4f2e00",
+              "on-tertiary-fixed": "#2b1700",
+              "surface-bright": "#f7f9fb",
+              "on-primary-fixed-variant": "#2d476f",
+              "primary": "#002045",
+              "surface-container-high": "#e6e8ea",
+              "on-tertiary-fixed-variant": "#633f0f",
+              "on-tertiary": "#ffffff",
+              "inverse-surface": "#2d3133",
+              "secondary-fixed-dim": "#b7c8e1",
+              "tertiary": "#321b00",
+              "on-primary-container": "#86a0cd",
+              "outline-variant": "#c4c6cf",
+              "background": "#f7f9fb",
+              "primary-fixed-dim": "#adc7f7",
+              "surface-container": "#eceef0",
+              "secondary-container": "#d0e1fb",
+              "on-primary-fixed": "#001b3c",
+              "on-surface-variant": "#43474e",
+              "inverse-primary": "#adc7f7",
+              "on-tertiary-container": "#c6955e",
+              "inverse-on-surface": "#eff1f3",
+              "surface-container-highest": "#e0e3e5",
+              "secondary": "#505f76",
+              "surface-dim": "#d8dadc",
+              "on-surface": "#191c1e",
+              "tertiary-fixed": "#ffddba",
+              "tertiary-fixed-dim": "#f2bc82",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-container": "#54647a",
+              "on-secondary-fixed-variant": "#38485d",
+              "surface-tint": "#455f88",
+              "error-container": "#ffdad6",
+              "surface-variant": "#e0e3e5",
+              "surface-container-low": "#f2f4f6",
+              "on-primary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "primary-container": "#1a365d",
+              "outline": "#74777f",
+              "secondary-fixed": "#d3e4fe",
+              "on-error": "#ffffff",
+              "on-secondary-fixed": "#0b1c30",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#d6e3ff",
+              "on-background": "#191c1e"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-[#eceef0] p-6 space-y-4 z-50">
+    <div class="mb-8 px-2">
+        <h1 class="text-lg font-extrabold text-[#1A365D] font-headline tracking-tight">Academic Atelier</h1>
+        <p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold opacity-60">Módulo de Gestión</p>
+    </div>
+    <nav class="flex-1 space-y-2">
+        <a class="flex items-center gap-3 px-4 py-3 bg-white text-[#1A365D] shadow-sm font-semibold rounded-lg transition-all duration-200 group" href="/dashboard/admin/">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;" data-icon="dashboard">dashboard</span>
+            <span class="font-medium text-sm">Panel</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-[#191c1e] opacity-80 hover:opacity-100 hover:bg-[#e6e8ea] rounded-lg transition-all duration-200 group" href="/dashboard/admin/cursos/">
+            <span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+            <span class="font-medium text-sm group-hover:translate-x-1 transition-transform">Cursos</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-[#191c1e] opacity-80 hover:opacity-100 hover:bg-[#e6e8ea] rounded-lg transition-all duration-200 group" href="/dashboard/admin/usuarios/">
+            <span class="material-symbols-outlined" data-icon="group">group</span>
+            <span class="font-medium text-sm group-hover:translate-x-1 transition-transform">Usuarios</span>
+        </a>
+    </nav>
+    <div class="mt-auto">
+        <button onclick="Auth.logout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-error/10 hover:bg-error text-error hover:text-white rounded-lg transition-all font-semibold font-['Inter'] text-sm shadow-sm md:justify-start">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">logout</span>
+            <span>Cerrar Sesión</span>
+        </button>
+    </div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full flex justify-between items-center px-8 py-4 bg-white/80 dark:bg-[#191c1e]/80 backdrop-blur-md z-40 shadow-[0px_12px_32px_rgba(0,32,69,0.06)]">
+    <div class="flex items-center gap-6">
+        <span class="text-xl font-bold text-[#191c1e] dark:text-[#f7f9fb] font-['Manrope'] tracking-tight">Plataforma Académica</span>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 group cursor-pointer">
+            <div class="text-right">
+                <p id="nav-user-name" class="text-sm font-bold text-on-surface">Cargando...</p>
+                <p id="nav-user-role" class="text-[10px] text-on-surface-variant font-medium uppercase tracking-wider">Cargando...</p>
+            </div>
+            <div id="nav-user-initial" class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold">U</div>
+        </div>
+    </div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="p-8 lg:p-12 space-y-12">
+<!-- Page Header -->
+<section class="flex flex-col md:flex-row justify-between items-end gap-4">
+<div class="max-w-2xl">
+<p class="text-primary font-label font-semibold tracking-wider uppercase text-xs mb-2">Resumen Institucional</p>
+<h3 class="text-4xl md:text-5xl font-extrabold font-headline text-on-surface tracking-tighter leading-tight">Panel de Control</h3>
+<p class="text-on-surface-variant mt-4 text-lg font-body leading-relaxed opacity-80">Bienvenido. Las métricas esenciales de la institución han sido sincronizadas con éxito.</p>
+</div>
+</section>
+<!-- Metric Cards: Bento Grid Style -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Total Students -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border-l-4 border-primary">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-primary bg-primary-fixed p-3 rounded-lg" data-icon="group">group</span>
+<span class="text-xs font-bold text-on-tertiary-container bg-tertiary-fixed px-2 py-1 rounded-full">+12.5%</span>
+</div>
+<p class="text-on-surface-variant font-label text-xs uppercase tracking-widest mb-1">Total Estudiantes</p>
+<h4 class="text-3xl font-bold font-headline text-on-surface">-</h4>
+</div>
+<!-- Active Courses -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border-l-4 border-surface-tint">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-surface-tint bg-secondary-fixed p-3 rounded-lg" data-icon="auto_stories">auto_stories</span>
+</div>
+<p class="text-on-surface-variant font-label text-xs uppercase tracking-widest mb-1">Cursos Activos</p>
+<h4 class="text-3xl font-bold font-headline text-on-surface">-</h4>
+</div>
+<!-- Total Faculty -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border-l-4 border-primary-container">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-primary-container bg-primary-fixed-dim p-3 rounded-lg" data-icon="school">school</span>
+</div>
+<p class="text-on-surface-variant font-label text-xs uppercase tracking-widest mb-1">Total Profesores</p>
+<h4 class="text-3xl font-bold font-headline text-on-surface">-</h4>
+</div>
+<!-- Avg GPA -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border-l-4 border-on-tertiary-container">
+<div class="flex justify-between items-start mb-6">
+<span class="material-symbols-outlined text-on-tertiary-container bg-tertiary-fixed p-3 rounded-lg" data-icon="grade">grade</span>
+</div>
+<p class="text-on-surface-variant font-label text-xs uppercase tracking-widest mb-1">Promedio General</p>
+<h4 class="text-3xl font-bold font-headline text-on-surface">-</h4>
+</div>
+</section>
+
+<!-- Visual Functional Metrics -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-1 bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10 flex flex-col">
+        <h3 class="font-headline font-bold text-lg mb-6 text-on-surface">Distribución de Calificaciones</h3>
+        <div id="grade-distribution" class="flex-1 flex flex-col justify-center space-y-6">
+            <div class="text-on-surface-variant text-sm text-center">Cargando métricas...</div>
+        </div>
+    </div>
+    
+    <div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10">
+        <h3 class="font-headline font-bold text-lg mb-6 text-on-surface">Actividad Reciente</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="text-on-surface-variant text-xs uppercase tracking-widest border-b border-outline-variant/20">
+                        <th class="pb-4 font-medium px-4">Usuario</th>
+                        <th class="pb-4 font-medium px-4">Acción</th>
+                        <th class="pb-4 font-medium px-4">Rol</th>
+                        <th class="pb-4 font-medium px-4 text-right">ID</th>
+                    </tr>
+                </thead>
+                <tbody id="recent-activity-body" class="divide-y divide-surface-container text-sm">
+                    <tr><td colspan="4" class="py-6 text-center text-on-surface-variant">Cargando actividad...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</div>
+</main>
+<!-- Floating Action Button (FAB) - Hidden as per Contextual Suppression Rule on Dashboard/Details focus -->
+<script src="/static/js/api.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!Auth.requireAuth()) return;
+    wireLogout();
+
+    const user = Auth.getUser();
+    if (user.rol !== 'ADMIN') {
+        Auth.redirectByRole(user.rol);
+        return;
+    }
+    document.getElementById('nav-user-name').textContent = `${user.first_name} ${user.last_name || ''}`;
+    document.getElementById('nav-user-role').textContent = user.rol;
+    document.getElementById('nav-user-initial').textContent = user.first_name ? user.first_name[0].toUpperCase() : 'U';
+
+    try {
+        // Fetch users to count students and teachers
+        const users = await apiGet('/usuarios/');
+        if (users) {
+            const students = users.filter(u => u.rol === 'ESTUDIANTE').length;
+            const teachers = users.filter(u => u.rol === 'PROFESOR').length;
+            
+            const h4s = document.querySelectorAll('h4.font-headline');
+            if (h4s.length >= 3) {
+                h4s[0].textContent = students.toLocaleString();
+                h4s[2].textContent = teachers.toLocaleString();
+            }
+
+            // Fill Recent Activity with the newest users (since they are fresh accounts)
+            const recentUsers = users.slice(0, 5); // Ordered by -date_joined from the view
+            const activityBody = document.getElementById('recent-activity-body');
+            activityBody.innerHTML = '';
+            recentUsers.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-surface-container-low transition-colors';
+                const roleColors = {
+                    'ADMIN': 'bg-primary-container text-on-primary-container',
+                    'PROFESOR': 'bg-surface-container-high text-on-surface-variant',
+                    'ESTUDIANTE': 'bg-secondary-container text-on-secondary-container'
+                };
+                tr.innerHTML = `
+                    <td class="py-4 px-4 font-semibold text-on-surface">${u.first_name} ${u.last_name || ''}</td>
+                    <td class="py-4 px-4 text-on-surface-variant">Cuenta creada</td>
+                    <td class="py-4 px-4"><span class="px-3 py-1 ${roleColors[u.rol] || 'bg-outline text-white'} text-[10px] uppercase font-bold tracking-widest rounded-full">${u.rol}</span></td>
+                    <td class="py-4 px-4 text-right font-medium font-headline">#${u.identificacion}</td>
+                `;
+                activityBody.appendChild(tr);
+            });
+            if(recentUsers.length === 0) activityBody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-on-surface-variant">No hay actividad reciente.</td></tr>';
+        }
+
+        // Fetch courses to count active courses
+        const courses = await apiGet('/cursos/');
+        if (courses) {
+            const h4s = document.querySelectorAll('h4.font-headline');
+            if (h4s.length >= 2) {
+                h4s[1].textContent = courses.length.toLocaleString();
+            }
+        }
+
+        // Fetch grades to compute avg GPA and Distribution Component
+        const grades = await apiGet('/calificaciones/');
+        if (grades && grades.length > 0) {
+            const sum = grades.reduce((acc, c) => acc + c.nota_final, 0);
+            const avg = (sum / grades.length).toFixed(2);
+            const h4s = document.querySelectorAll('h4.font-headline');
+            if (h4s.length >= 4) {
+                h4s[3].textContent = avg;
+            }
+
+            // Populate Distribution Data (Functional Metrics)
+            let a = 0, b = 0, c = 0, d = 0;
+            grades.forEach(g => {
+                if (g.nota_final >= 4.5) a++;
+                else if (g.nota_final >= 4.0) b++;
+                else if (g.nota_final >= 3.0) c++;
+                else d++;
+            });
+            const total = grades.length;
+            const distEl = document.getElementById('grade-distribution');
+            distEl.innerHTML = `
+                <div class="flex items-center gap-4">
+                    <div class="w-8 font-bold font-headline">A</div>
+                    <div class="flex-1 bg-surface-container-high h-3 rounded-full overflow-hidden">
+                        <div class="bg-primary h-full rounded-full w-0 transition-all duration-1000" style="width: ${(a/total)*100}%"></div>
+                    </div>
+                    <div class="w-10 text-right text-xs font-bold text-on-surface-variant">${a}</div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-8 font-bold font-headline">B</div>
+                    <div class="flex-1 bg-surface-container-high h-3 rounded-full overflow-hidden">
+                        <div class="bg-surface-tint h-full rounded-full w-0 transition-all duration-1000" style="width: ${(b/total)*100}%"></div>
+                    </div>
+                    <div class="w-10 text-right text-xs font-bold text-on-surface-variant">${b}</div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-8 font-bold font-headline">C</div>
+                    <div class="flex-1 bg-surface-container-high h-3 rounded-full overflow-hidden">
+                        <div class="bg-secondary h-full rounded-full w-0 transition-all duration-1000" style="width: ${(c/total)*100}%"></div>
+                    </div>
+                    <div class="w-10 text-right text-xs font-bold text-on-surface-variant">${c}</div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="w-8 font-bold font-headline">D/F</div>
+                    <div class="flex-1 bg-surface-container-high h-3 rounded-full overflow-hidden">
+                        <div class="bg-error h-full rounded-full w-0 transition-all duration-1000" style="width: ${(d/total)*100}%"></div>
+                    </div>
+                    <div class="w-10 text-right text-xs font-bold text-on-surface-variant">${d}</div>
+                </div>
+            `;
+        } else {
+            const h4s = document.querySelectorAll('h4.font-headline');
+            if (h4s.length >= 4) {
+                h4s[3].textContent = "-";
+            }
+            document.getElementById('grade-distribution').innerHTML = '<div class="text-on-surface-variant text-sm text-center py-4">Sin calificaciones registradas para mostrar la distribución.</div>';
+        }
+    } catch (e) {
+        console.error('Error loading dashboard data', e);
+    }
+});
+</script>
+</body></html>
