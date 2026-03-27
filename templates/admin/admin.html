@@ -273,44 +273,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                 h4s[3].textContent = avg;
             }
 
-            // Populate Distribution Data (Functional Metrics)
-            let a = 0, b = 0, c = 0, d = 0;
+            // Populate Distribution Data (Aprobados vs Reprobados)
+            let approved = 0, failed = 0;
             grades.forEach(g => {
-                if (g.nota_final >= 4.5) a++;
-                else if (g.nota_final >= 4.0) b++;
-                else if (g.nota_final >= 3.0) c++;
-                else d++;
+                if (g.nota_final >= 3.0) approved++;
+                else failed++;
             });
             const total = grades.length;
             const distEl = document.getElementById('grade-distribution');
             distEl.innerHTML = `
                 <div class="flex items-center gap-4">
-                    <div class="w-8 font-bold font-headline">A</div>
+                    <div class="w-24 font-bold font-headline text-sm">Aprobados</div>
                     <div class="flex-1 bg-surface-container-high h-3 rounded-full overflow-hidden">
-                        <div class="bg-primary h-full rounded-full w-0 transition-all duration-1000" style="width: ${(a/total)*100}%"></div>
+                        <div class="bg-primary h-full rounded-full transition-all duration-1000" style="width: ${(approved/total)*100}%"></div>
                     </div>
-                    <div class="w-10 text-right text-xs font-bold text-on-surface-variant">${a}</div>
+                    <div class="w-10 text-right text-xs font-bold text-on-surface-variant">${approved}</div>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="w-8 font-bold font-headline">B</div>
+                <div class="flex items-center gap-4 mt-4">
+                    <div class="w-24 font-bold font-headline text-sm">Reprobados</div>
                     <div class="flex-1 bg-surface-container-high h-3 rounded-full overflow-hidden">
-                        <div class="bg-surface-tint h-full rounded-full w-0 transition-all duration-1000" style="width: ${(b/total)*100}%"></div>
+                        <div class="bg-error h-full rounded-full transition-all duration-1000" style="width: ${(failed/total)*100}%"></div>
                     </div>
-                    <div class="w-10 text-right text-xs font-bold text-on-surface-variant">${b}</div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="w-8 font-bold font-headline">C</div>
-                    <div class="flex-1 bg-surface-container-high h-3 rounded-full overflow-hidden">
-                        <div class="bg-secondary h-full rounded-full w-0 transition-all duration-1000" style="width: ${(c/total)*100}%"></div>
-                    </div>
-                    <div class="w-10 text-right text-xs font-bold text-on-surface-variant">${c}</div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="w-8 font-bold font-headline">D/F</div>
-                    <div class="flex-1 bg-surface-container-high h-3 rounded-full overflow-hidden">
-                        <div class="bg-error h-full rounded-full w-0 transition-all duration-1000" style="width: ${(d/total)*100}%"></div>
-                    </div>
-                    <div class="w-10 text-right text-xs font-bold text-on-surface-variant">${d}</div>
+                    <div class="w-10 text-right text-xs font-bold text-on-surface-variant">${failed}</div>
                 </div>
             `;
         } else {
