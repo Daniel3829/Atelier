@@ -55,9 +55,13 @@ class LoginSerializer(serializers.Serializer):
 
         # Intentar buscar por email primero, luego por username
         try:
-            user = Usuario.objects.get(email=email_or_username)
-            username = user.username
-        except Usuario.DoesNotExist:
+            # Usar filter().first() para evitar MultipleObjectsReturned si hay duplicados por error
+            user = Usuario.objects.filter(email=email_or_username).first()
+            if user:
+                username = user.username
+            else:
+                username = email_or_username
+        except Exception:
             username = email_or_username
 
         user = authenticate(username=username, password=password)

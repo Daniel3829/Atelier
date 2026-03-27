@@ -12,10 +12,10 @@ class Command(BaseCommand):
         username = "admin"
         password = "admin12345"
 
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists():
             self.stdout.write(
                 self.style.WARNING(
-                    f'Superuser "{username}" already exists — skipping creation.'
+                    f'Superuser "{username}" or email "{email}" already exists — skipping creation.'
                 )
             )
             return
