@@ -165,6 +165,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        container.innerHTML = '';
         courses.forEach((c) => {
             const defaultImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuBiUKwJNdLGF-e3HoyVMzKZ4IInjoNog2i77guD1ox9k0RUzmOwe6HShwP64YvAMLYtOuOEbAGv7Ba2ko0VTrPsgQ2qoOKTadE00W9cmUjUTSdMuwCggqiQ9BLbSLQpnjkpPfDSDL5eVCP4wSwhwkWSDwui1m6Llfox3Di5yvxywmsU4-3-ivISKX9dA18nELWM0t8nNYBtLxz4jygkIRlqfv31o7StkXcjuJWsrqVCDHhLmfcK0_yY92bNYZFz-dXbJbACGdw6bKLn";
             const imageUrl = c.imagen || defaultImg;
