@@ -1,6 +1,8 @@
 # usuarios/views.py
 from rest_framework import viewsets, status, generics
 from rest_framework.views import APIView
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -9,6 +11,7 @@ from .serializers import UsuarioSerializer, RegistroSerializer, LoginSerializer
 from .permissions import EsAdmin
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class RegistroView(generics.CreateAPIView):
     """RF-001: Registro de usuarios."""
     queryset = Usuario.objects.all()
@@ -33,6 +36,7 @@ class RegistroView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(APIView):
     """RF-002: Inicio de sesion."""
     permission_classes = [AllowAny]
